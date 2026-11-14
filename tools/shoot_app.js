@@ -1,0 +1,32 @@
+// Screenshots of the real web build (served on :8099) at a 390x844 phone viewport.
+const {chromium}=require('playwright-core');
+const out='/workspace/commute-app/screenshots/';
+(async()=>{
+ const b=await chromium.launch({executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});
+ const ctx=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,isMobile:true,hasTouch:true});
+ const p=await ctx.newPage();
+ p.on('pageerror',e=>console.log('pageerror:',e.message));
+ const go=async(hash,wait=5000)=>{await p.goto('about:blank');await p.goto('http://localhost:8099/#'+hash);await p.waitForTimeout(wait);};
+ const sem=async()=>{const ph=await p.$('flt-semantics-placeholder');if(ph){await ph.evaluate(e=>e.click());await p.waitForTimeout(800);}};
+ await go('/tomorrow',10000);
+ await p.screenshot({path:out+'01_tomorrow.png'});
+ await sem();
+ await p.getByRole('button',{name:/Add trip/}).first().click();await p.waitForTimeout(3000);
+ await p.screenshot({path:out+'03_add_trip_sheet.png'});
+ await go('/route/1',6000);
+ await p.screenshot({path:out+'02_route_detail.png'});
+ await go('/places');
+ await p.screenshot({path:out+'04_places.png'});
+ await sem();
+ await p.getByRole('button',{name:/Add place/}).first().click();await p.waitForTimeout(1500);
+ await p.getByRole('textbox').first().fill('Office');await p.waitForTimeout(500);
+ await p.screenshot({path:out+'06_add_place_sheet.png'});
+ await p.getByRole('button',{name:/Pick on map/}).first().click();await p.waitForTimeout(9000);
+ await p.screenshot({path:out+'07_map_picker.png'});
+ await p.mouse.click(230,36);await p.waitForTimeout(800);await p.keyboard.type('Park Street',{delay:40});await p.keyboard.press('Enter');
+ await p.waitForTimeout(5000);
+ await p.screenshot({path:out+'08_map_search.png'});
+ await go('/settings');
+ await p.screenshot({path:out+'05_settings.png'});
+ await b.close();
+})();

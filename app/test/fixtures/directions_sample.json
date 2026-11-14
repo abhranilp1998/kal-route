@@ -1,0 +1,68 @@
+{
+  "status": "OK",
+  "geocoded_waypoints": [],
+  "routes": [
+    {
+      "fare": {"currency": "INR", "text": "₹35.00", "value": 35},
+      "legs": [
+        {
+          "start_address": "Lake Rd, Kalighat, Kolkata",
+          "end_address": "Sector II, Salt Lake, Kolkata",
+          "departure_time": {"text": "9:12 AM", "time_zone": "Asia/Calcutta", "value": 1763264520},
+          "arrival_time": {"text": "9:55 AM", "time_zone": "Asia/Calcutta", "value": 1763267100},
+          "duration": {"text": "43 mins", "value": 2580},
+          "steps": [
+            {"travel_mode": "WALKING", "duration": {"text": "6 mins", "value": 340}},
+            {
+              "travel_mode": "TRANSIT",
+              "duration": {"text": "14 mins", "value": 840},
+              "transit_details": {
+                "departure_stop": {"name": "Kalighat"},
+                "arrival_stop": {"name": "Esplanade"},
+                "departure_time": {"value": 1763264880},
+                "headsign": "Dakshineswar",
+                "num_stops": 6,
+                "line": {"name": "Blue Line", "short_name": "Blue Line", "vehicle": {"type": "SUBWAY", "name": "Metro"}}
+              }
+            },
+            {
+              "travel_mode": "TRANSIT",
+              "duration": {"text": "18 mins", "value": 1080},
+              "transit_details": {
+                "departure_stop": {"name": "Esplanade"},
+                "arrival_stop": {"name": "Karunamoyee"},
+                "headsign": "Salt Lake",
+                "num_stops": 11,
+                "line": {"name": "Esplanade - Salt Lake", "short_name": "S-12", "vehicle": {"type": "BUS", "name": "Bus"}}
+              }
+            },
+            {"travel_mode": "WALKING", "duration": {"text": "5 mins", "value": 290}}
+          ]
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "start_address": "Lake Rd, Kalighat, Kolkata",
+          "end_address": "Sector II, Salt Lake, Kolkata",
+          "duration": {"text": "1 hour 1 min", "value": 3660},
+          "steps": [
+            {"travel_mode": "WALKING", "duration": {"text": "4 mins", "value": 240}},
+            {
+              "travel_mode": "TRANSIT",
+              "duration": {"text": "52 mins", "value": 3120},
+              "transit_details": {
+                "departure_stop": {"name": "Hazra More"},
+                "arrival_stop": {"name": "Karunamoyee"},
+                "num_stops": 24,
+                "line": {"name": "215A", "vehicle": {"type": "BUS"}}
+              }
+            },
+            {"travel_mode": "WALKING", "duration": {"text": "5 mins", "value": 300}}
+          ]
+        }
+      ]
+    }
+  ]
+}

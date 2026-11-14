@@ -1,0 +1,206 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Commute Planner — v1 mockups</title>
+<style>
+:root{--bg:#111315;--card:#1B1E21;--card2:#22262A;--line:#2A2E33;--text:#ECEDEE;--muted:#8A8F98;--amber:#F2B84B;--metro:#4C8DFF;--bus:#3CC27A;--walk:#8A8F98;--auto:#F2B84B;--ferry:#36C5D6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0A0B0C;font-family:Inter,Manrope,sans-serif;color:var(--text);padding:56px 48px 64px;-webkit-font-smoothing:antialiased}
+.title{max-width:2200px;margin:0 auto 36px;display:flex;align-items:flex-end;justify-content:space-between}
+.title h1{font-family:Manrope;font-size:34px;font-weight:800;letter-spacing:-.02em}
+.title h1 span{color:var(--amber)}
+.title p{color:var(--muted);font-size:15px;margin-top:6px}
+.tag{font-family:'JetBrains Mono';font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.row{display:flex;gap:40px;justify-content:center;flex-wrap:nowrap}
+.cap{text-align:center;margin-top:16px;font-family:'JetBrains Mono';font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.cap b{color:var(--text);font-weight:600}
+.phone{width:390px;height:844px;background:var(--bg);border-radius:48px;position:relative;overflow:hidden;box-shadow:0 0 0 10px #1d1f22,0 0 0 11px #33363b,0 30px 60px rgba(0,0,0,.5)}
+.wrap{padding:11px}
+.status{height:50px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0;font-size:15px;font-weight:600;font-feature-settings:"tnum"}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px}
+.sicons{display:flex;gap:6px;align-items:center}
+.sicons i{display:block}
+.bat{width:24px;height:12px;border:1.5px solid var(--text);border-radius:4px;position:relative;opacity:.9}
+.bat:after{content:"";position:absolute;inset:1.5px;right:6px;background:var(--text);border-radius:1.5px}
+.content{padding:8px 20px 0}
+.tnum{font-feature-settings:"tnum";font-variant-numeric:tabular-nums}
+.h-date{font-family:Manrope;font-size:28px;font-weight:800;letter-spacing:-.02em}
+.eyebrow{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);font-size:14px;margin-top:4px}
+.sub b{color:var(--amber);font-weight:600}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-top:12px}
+.iconbtn{width:40px;height:40px;border-radius:12px;background:var(--card);display:grid;place-items:center}
+.wx{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin-top:18px;font-size:13px;color:var(--muted)}
+.wx b{color:var(--text);font-weight:600}
+.card{background:var(--card);border-radius:16px;padding:18px;margin-top:12px;position:relative}
+.leave{display:flex;align-items:baseline;gap:10px}
+.leave .t{font-family:Inter;font-size:32px;font-weight:700;color:var(--amber);letter-spacing:-.02em;font-feature-settings:"tnum"}
+.leave .l{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.14em;color:var(--amber);opacity:.8}
+.fromto{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:17px;font-weight:600}
+.fromto .arrow{flex:1;height:1px;background:linear-gradient(90deg,var(--line),var(--muted));position:relative}
+.fromto .arrow:after{content:"";position:absolute;right:-1px;top:-4px;border:4.5px solid transparent;border-left:7px solid var(--muted)}
+.modebar{display:flex;height:6px;border-radius:3px;overflow:hidden;gap:2px;margin-top:14px}
+.modebar span{display:block;height:100%}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+.meta .r{color:var(--text);font-weight:600;font-feature-settings:"tnum"}
+.chips{display:flex;gap:6px}
+.mchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.dot{width:7px;height:7px;border-radius:50%}
+.arrive{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.arrive b{color:var(--text);font-feature-settings:"tnum"}
+.chev{color:var(--muted);font-size:18px}
+.addbtn{margin:20px auto 0;display:flex;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:16px;background:var(--amber);color:#1a1405;font-weight:700;font-size:16px}
+.nav{position:absolute;left:11px;right:11px;bottom:11px;height:84px;background:rgba(17,19,21,.92);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding-top:12px;border-radius:0 0 38px 38px}
+.nav div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);font-weight:500}
+.nav div.on{color:var(--amber)}
+.home-ind{position:absolute;bottom:19px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--text);opacity:.85}
+.example{position:absolute;bottom:104px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:10px;color:#5d626a;letter-spacing:.08em;white-space:nowrap}
+/* route detail */
+.rhead{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.rhead h2{font-family:Manrope;font-size:20px;font-weight:800;letter-spacing:-.01em}
+.summary{display:flex;gap:8px;margin-top:16px}
+.pill{flex:1;background:var(--card);border-radius:14px;padding:12px}
+.pill .k{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.pill .v{font-size:20px;font-weight:700;margin-top:4px;font-feature-settings:"tnum"}
+.pill .v.a{color:var(--amber)}
+.tl{margin-top:20px;position:relative}
+.stop{display:grid;grid-template-columns:52px 26px 1fr;align-items:center;min-height:30px}
+.stop .tm{font-size:14px;font-weight:600;font-feature-settings:"tnum";color:var(--muted)}
+.stop .nd{width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--text);justify-self:center;z-index:2}
+.stop .nm{font-size:16px;font-weight:600}
+.stop .nm small{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:1px}
+.seg{display:grid;grid-template-columns:52px 26px 1fr;min-height:64px}
+.seg .bar{justify-self:center;width:4px;border-radius:2px;margin:-9px 0;position:relative;z-index:1}
+.seg .bar.walk{width:3px;background:repeating-linear-gradient(180deg,var(--walk) 0 5px,transparent 5px 10px)!important}
+.seg .info{padding:8px 0 8px 6px;align-self:center}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 9px;border-radius:8px}
+.seg .info .d{font-size:13px;color:var(--muted);margin-top:6px}
+.seg .info .d b{color:var(--text);font-weight:600}
+.cta{position:absolute;left:31px;right:31px;bottom:40px;height:56px;border-radius:16px;background:var(--amber);color:#1a1405;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:16px}
+.alt{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:13px;color:var(--muted)}
+/* sheet */
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:5}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:#181B1E;border-radius:28px 28px 0 0;z-index:6;padding:10px 20px 34px;border-top:1px solid var(--line)}
+.grab{width:40px;height:5px;border-radius:3px;background:#3a3e44;margin:0 auto 16px}
+.sheet h3{font-family:Manrope;font-size:22px;font-weight:800}
+.lbl{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin:18px 0 10px}
+.chiprow{display:flex;gap:8px;flex-wrap:wrap}
+.pchip{display:flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:12px;background:var(--card2);font-size:14px;font-weight:600;color:var(--text);border:1.5px solid transparent}
+.pchip.sel{border-color:var(--amber);background:rgba(242,184,75,.12);color:var(--amber)}
+.timepick{display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:14px;padding:12px 16px}
+.timepick .big{font-size:30px;font-weight:700;font-feature-settings:"tnum";letter-spacing:-.02em}
+.seg2{display:flex;background:#111315;border-radius:10px;padding:3px}
+.seg2 span{padding:6px 10px;font-size:12px;font-weight:600;color:var(--muted);border-radius:8px}
+.seg2 span.on{background:var(--card2);color:var(--text)}
+.preview{background:var(--card2);border-radius:16px;padding:14px;margin-top:16px}
+.planbtn{height:54px;border-radius:16px;background:var(--amber);color:#1a1405;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;margin-top:16px}
+/* places */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.tile{background:var(--card);border-radius:16px;height:150px;padding:16px;display:flex;flex-direction:column;justify-content:space-between}
+.tile .em{font-size:34px;width:56px;height:56px;border-radius:16px;background:var(--card2);display:grid;place-items:center}
+.tile .n{font-size:17px;font-weight:700}
+.tile .a{font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile.add{background:transparent;border:1.5px dashed #3a3e44;align-items:center;justify-content:center;color:var(--muted);gap:8px;font-weight:600}
+.tile.add .plus{width:48px;height:48px;border-radius:50%;background:rgba(242,184,75,.12);color:var(--amber);display:grid;place-items:center;font-size:26px}
+.hint{color:var(--muted);font-size:13px;margin-top:16px;text-align:center}
+/* settings */
+.group{background:var(--card);border-radius:16px;margin-top:10px;overflow:hidden}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--line);gap:12px}
+.srow:last-child{border-bottom:0}
+.srow .k{font-size:15px;font-weight:600}
+.srow .k small{display:block;color:var(--muted);font-size:12px;font-weight:500;margin-top:3px}
+.srow .v{font-size:15px;color:var(--amber);font-weight:700;font-feature-settings:"tnum"}
+.stepper{display:flex;align-items:center;gap:10px;white-space:nowrap;flex-shrink:0}
+.stepper span.b{width:32px;height:32px;border-radius:10px;background:var(--card2);display:grid;place-items:center;font-size:18px;color:var(--text)}
+.toggle{width:50px;height:30px;border-radius:15px;background:#3a3e44;position:relative}
+.toggle:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#ECEDEE}
+.toggle.on{background:var(--amber)}.toggle.on:after{left:23px;background:#1a1405}
+.radio{display:flex;gap:6px;padding:0 16px 16px}
+.radio span{flex:1;white-space:nowrap;text-align:center;padding:10px 0;border-radius:10px;background:var(--card2);font-size:13px;font-weight:600;color:var(--muted)}
+.radio span.on{background:rgba(242,184,75,.14);color:var(--amber);box-shadow:inset 0 0 0 1.5px var(--amber)}
+.sec{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin:22px 4px 0}
+svg{display:block}
+</style></head><body>
+<div class="title"><div><h1>Commute <span>Planner</span> · v1 screens</h1><p>Dark-first · Kolkata transit · all routes, times and fares are example data</p></div><div class="tag">390 × 844 · iPhone-class frame · Inter / Manrope</div></div>
+<div class="row" id="row"></div>
+
+<template id="status"><div class="status"><span class="tnum">21:04</span><div class="sicons"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#ECEDEE"/><rect x="5" y="5" width="3" height="7" rx="1" fill="#ECEDEE"/><rect x="10" y="2.5" width="3" height="9.5" rx="1" fill="#ECEDEE"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#ECEDEE"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.4 3.4 0 00-4.8 0z M3.6 6.7a6.2 6.2 0 018.8 0l1.4-1.6a8.4 8.4 0 00-11.6 0z M.6 3.5a10.4 10.4 0 0114.8 0L16.8 2A12.5 12.5 0 00-.8 2z" fill="#ECEDEE"/></svg><div class="bat"></div></div></div><div class="island"></div></template>
+
+<script>
+const ST=document.getElementById('status').innerHTML;
+const ic={
+ gear:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ECEDEE" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>',
+ back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ECEDEE" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>',
+ refresh:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#ECEDEE" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 11-2.6-6.4M21 4v5h-5"/></svg>',
+ cal:(c)=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>`,
+ pin:(c)=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0119 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`,
+ cog:(c)=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.8"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>`,
+ nav:'<svg width="18" height="18" viewBox="0 0 24 24" fill="#1a1405"><path d="M3 11l18-8-8 18-2-8z"/></svg>',
+ cloud:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#36C5D6" stroke-width="1.8" stroke-linecap="round"><path d="M7 17a4 4 0 01-.5-8A6 6 0 0118 9a4 4 0 01-.5 8z"/><path d="M9 20l-1 2M13 20l-1 2M17 20l-1 2"/></svg>',
+};
+const nav=(on)=>`<div class="nav"><div class="${on=='t'?'on':''}">${ic.cal(on=='t'?'#F2B84B':'#8A8F98')}Tomorrow</div><div class="${on=='p'?'on':''}">${ic.pin(on=='p'?'#F2B84B':'#8A8F98')}Places</div><div class="${on=='s'?'on':''}">${ic.cog(on=='s'?'#F2B84B':'#8A8F98')}Settings</div></div><div class="home-ind"></div>`;
+const tripCard=(t,from,to,bar,chips,min,fare,arr)=>`<div class="card"><div class="leave"><span class="t">${t}</span><span class="l">LEAVE</span></div><div class="fromto"><span>${from}</span><span class="arrow"></span><span>${to}</span></div><div class="modebar">${bar}</div><div class="meta"><div class="chips">${chips}</div><span class="r">${min} min · ₹${fare}</span></div>${arr?`<div class="arrive"><span>arrive <b>${arr}</b></span><span class="chev">›</span></div>`:''}</div>`;
+const mc=(c,n)=>`<span class="mchip"><span class="dot" style="background:${c}"></span>${n}</span>`;
+const bs=(c,f,dash)=>`<span style="flex:${f};background:${dash?`repeating-linear-gradient(90deg,${c} 0 4px,transparent 4px 7px)`:c}"></span>`;
+
+const tomorrowBody=`<div class="content">
+ <div class="topbar"><div><div class="eyebrow">Tomorrow</div><div class="h-date" style="margin-top:4px">Monday, 16 Nov</div><div class="sub">2 trips · first leave <b>9:12</b></div></div><div class="iconbtn">${ic.gear}</div></div>
+ <div class="wx">${ic.cloud}<span><b>27°</b> · light rain after 4 PM — evening walk swapped for bus</span></div>
+ ${tripCard('9:12','Home','College',bs('#8A8F98',6,1)+bs('#4C8DFF',14)+bs('#3CC27A',18)+bs('#8A8F98',5,1),mc('#8A8F98','walk')+mc('#4C8DFF','metro')+mc('#3CC27A','bus'),43,35,'9:55')}
+ ${tripCard('17:20','College','Gym',bs('#3CC27A',16)+bs('#8A8F98',6,1),mc('#3CC27A','bus')+mc('#8A8F98','walk'),22,15,'17:42')}
+ <div class="addbtn"><span style="font-size:22px;line-height:0">+</span> Add trip</div>
+</div>`;
+
+const screens={
+tomorrow:{cap:'01 · <b>Tomorrow</b> (home)',html:ST+tomorrowBody+`<div class="example">EXAMPLE DATA</div>`+nav('t')},
+route:{cap:'02 · <b>Route detail</b>',html:ST+`<div class="content">
+ <div class="rhead"><div class="iconbtn">${ic.back}</div><h2>Home → College</h2><div class="iconbtn">${ic.refresh}</div></div>
+ <div class="summary"><div class="pill"><div class="k">Leave</div><div class="v a">9:12</div></div><div class="pill"><div class="k">Arrive</div><div class="v">9:55</div></div><div class="pill"><div class="k">Fare</div><div class="v">₹35</div></div></div>
+ <div class="tl">
+  <div class="stop"><span class="tm" style="color:#F2B84B">9:12</span><span class="nd" style="border-color:#F2B84B"></span><span class="nm">Home<small>Lake Road, Kalighat</small></span></div>
+  <div class="seg"><span></span><span class="bar walk"></span><div class="info"><span class="badge" style="background:rgba(138,143,152,.14);color:#B9BDC4">🚶 Walk</span><div class="d"><b>6 min</b> · 450 m</div></div></div>
+  <div class="stop"><span class="tm">9:18</span><span class="nd" style="border-color:#4C8DFF"></span><span class="nm">Kalighat Metro<small>Platform 1 · towards Dakshineswar</small></span></div>
+  <div class="seg"><span></span><span class="bar" style="background:#4C8DFF"></span><div class="info"><span class="badge" style="background:rgba(76,141,255,.15);color:#7FAEFF">Ⓜ Blue Line</span><div class="d">→ Esplanade · <b>6 stops</b> · 14 min · ₹15</div></div></div>
+  <div class="stop"><span class="tm">9:32</span><span class="nd" style="border-color:#3CC27A"></span><span class="nm">Esplanade<small>Exit 3 · bus stand, 2 min walk</small></span></div>
+  <div class="seg"><span></span><span class="bar" style="background:#3CC27A"></span><div class="info"><span class="badge" style="background:rgba(60,194,122,.15);color:#6AD89C">🚌 Bus S-12</span><div class="d">→ Karunamoyee · <b>18 min</b> · ₹20</div></div></div>
+  <div class="stop"><span class="tm">9:50</span><span class="nd" style="border-color:#8A8F98"></span><span class="nm">Karunamoyee<small>Salt Lake, Sector II</small></span></div>
+  <div class="seg" style="min-height:52px"><span></span><span class="bar walk"></span><div class="info"><span class="badge" style="background:rgba(138,143,152,.14);color:#B9BDC4">🚶 Walk</span><div class="d"><b>5 min</b> · 380 m</div></div></div>
+  <div class="stop"><span class="tm" style="color:#ECEDEE">9:55</span><span class="nd" style="background:#ECEDEE"></span><span class="nm">College<small>arrive 5 min before 10:00</small></span></div>
+ </div>
+</div><div class="example" style="bottom:110px">EXAMPLE DATA</div><div class="cta">${ic.nav} Start trip</div><div class="home-ind"></div>`},
+add:{cap:'03 · <b>Add trip</b> sheet',html:ST+tomorrowBody+nav('t')+`<div class="dim"></div><div class="sheet"><div class="grab"></div><h3>Plan a trip</h3>
+ <div class="lbl">From</div><div class="chiprow"><span class="pchip sel">🏠 Home</span><span class="pchip">🎓 College</span><span class="pchip">🏋️ Gym</span><span class="pchip">👵 Mom's place</span></div>
+ <div class="lbl">To</div><div class="chiprow"><span class="pchip">🏠 Home</span><span class="pchip">🎓 College</span><span class="pchip">🏋️ Gym</span><span class="pchip sel">👵 Mom's place</span></div>
+ <div class="lbl">Arrive by · Mon 16 Nov</div><div class="timepick"><span class="big">19:30</span><div class="seg2"><span>−15</span><span class="on">19:30</span><span>+15</span></div></div>
+ <div class="preview"><div style="display:flex;justify-content:space-between;align-items:baseline"><div class="leave"><span class="t" style="font-size:26px">18:41</span><span class="l">LEAVE</span></div><span style="font-size:13px;color:#8A8F98" class="tnum">44 min · ₹30</span></div>
+ <div class="modebar" style="margin-top:10px">${bs('#8A8F98',4,1)+bs('#4C8DFF',24)+bs('#F2B84B',12)+bs('#8A8F98',4,1)}</div>
+ <div class="meta" style="margin-top:8px"><div class="chips">${mc('#4C8DFF','Blue Line → Tollygunge')+mc('#F2B84B','auto')}</div></div><div style="font-size:11px;color:#5d626a;margin-top:8px;font-family:JetBrains Mono;letter-spacing:.06em">PREVIEW · EXAMPLE DATA</div></div>
+ <div class="planbtn">Plan it</div></div>`},
+places:{cap:'04 · <b>Places</b>',html:ST+`<div class="content">
+ <div class="topbar"><div><div class="eyebrow">Saved</div><div class="h-date" style="margin-top:4px">Places</div><div class="sub">4 places · long-press to edit</div></div></div>
+ <div class="grid">
+  <div class="tile"><div class="em">🏠</div><div><div class="n">Home</div><div class="a">Lake Road, Kalighat</div></div></div>
+  <div class="tile"><div class="em">🎓</div><div><div class="n">College</div><div class="a">Sector II, Salt Lake</div></div></div>
+  <div class="tile"><div class="em">🏋️</div><div><div class="n">Gym</div><div class="a">City Centre, Salt Lake</div></div></div>
+  <div class="tile"><div class="em">👵</div><div><div class="n">Mom's place</div><div class="a">Diamond Harbour Rd, Behala</div></div></div>
+  <div class="tile add"><div class="plus">+</div>Add place</div>
+ </div><div class="hint">Search an address or drop a pin on the map</div>
+</div><div class="example">EXAMPLE DATA</div>`+nav('p')},
+settings:{cap:'05 · <b>Settings</b>',html:ST+`<div class="content">
+ <div class="topbar"><div><div class="eyebrow">Preferences</div><div class="h-date" style="margin-top:4px">Settings</div></div></div>
+ <div class="sec">Nightly plan</div>
+ <div class="group"><div class="srow"><div class="k">Notify me at<small>Tomorrow's plan arrives as one card</small></div><span class="v">21:00</span></div>
+ <div class="srow"><div class="k">Buffer<small>Tea break and slack before leaving</small></div><div class="stepper"><span class="b">−</span><span class="v">5 min</span><span class="b">+</span></div></div></div>
+ <div class="sec">Routes</div>
+ <div class="group"><div class="srow" style="border:0;padding-bottom:12px"><div class="k">Priority<small>How the best route is picked</small></div></div>
+ <div class="radio"><span class="on">Fastest</span><span>Cheapest</span><span>Fewest changes</span></div>
+ <div class="srow" style="border-top:1px solid var(--line)"><div class="k">Avoid long walks<small>Skip routes with over 15 min walking</small></div><div class="toggle on"></div></div></div>
+ <div class="sec">Debug</div>
+ <div class="group"><div class="srow"><div class="k">Run nightly job now<small>Fetch routes and send the card</small></div><span class="chev">›</span></div>
+ <div class="srow"><div class="k">Battery optimisation<small>Turn off so the 9 PM job isn't killed</small></div><span class="chev">›</span></div></div>
+</div>`+nav('s')},
+};
+const row=document.getElementById('row');
+for(const [id,s] of Object.entries(screens)){
+  const d=document.createElement('div');
+  d.innerHTML=`<div class="wrap" id="${id}"><div class="phone">${s.html}</div></div><div class="cap">${s.cap}</div>`;
+  row.appendChild(d);
+}
+</script></body></html>
