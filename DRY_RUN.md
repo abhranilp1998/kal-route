@@ -1,7 +1,9 @@
 # Dry run: Commute Planner v1.1
 
-Run on the box on Sat 14 Nov 2026, 20:05–21:40 IST. Flutter 3.47.7 stable, Dart 3.14.0, JDK 17,
+Run on the box on Sat 14 Nov 2026, 20:05–21:40 IST. Flutter "3.47.7" stable (see note below), Dart 3.14.0, JDK 17,
 Android SDK 36/37, Chrome 156.
+
+> **Note (added with CI/CD):** the box SDK reported itself as 3.47.7 but carried the 3.50.0 engine and Dart 3.14.0 (a mixed checkout). Real 3.47.7 ships Dart 3.13.5 and cannot resolve this pubspec. The box now uses a clean Flutter 3.50.0 stable, the first stable with Dart 3.14, and CI pins the same version.
 
 | # | Item | Result | Evidence / notes |
 |---|------|--------|------------------|

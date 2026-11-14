@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 env:
-  FLUTTER_VERSION: "3.47.7"
+  FLUTTER_VERSION: "3.50.0" # first stable with Dart 3.14 (pubspec needs ^3.14.0)
   JAVA_VERSION: "21" # AGP 9.x lint needs a JDK 21 runtime; bytecode still targets 17
 
 defaults:

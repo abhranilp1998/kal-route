@@ -23,7 +23,7 @@ commute-app/
 
 | Need | Package (version) | Why |
 |---|---|---|
-| UI | Flutter 3.47.7 stable, Dart 3.14, `material_ui` | current stable; `material_ui` is the new home of Material widgets |
+| UI | Flutter 3.50.0 stable, Dart 3.14, `material_ui` | current stable; `material_ui` is the new home of Material widgets |
 | State | `flutter_riverpod` 3.5 | stream providers over drift watch queries |
 | Navigation | `go_router` 18.1 | bottom-bar shell + pushed route detail |
 | **Database** | `drift` 2.35.4, `drift_flutter` 0.3.1, `drift_dev` + `build_runner` | see below |
@@ -142,7 +142,7 @@ card text in-app.
 
 ## CI/CD
 
-All workflows pin Flutter **3.47.7** (stable) and every action by commit SHA. Dependabot
+All workflows pin Flutter **3.50.0** (stable, Dart 3.14) and every action by commit SHA. Dependabot
 (`.github/dependabot.yml`) opens weekly PRs for pub, Gradle and GitHub Actions, monthly for the
 `tools/` npm package.
 
