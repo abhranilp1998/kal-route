@@ -28,13 +28,17 @@ class PlacesScreen extends ConsumerWidget {
               style: AppText.body(color: AppColors.muted),
             ),
             const SizedBox(height: 20),
-            GridView.count(
-              crossAxisCount: 2,
+            GridView(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.1,
+              // Fixed tile height (not an aspect ratio) so the emoji + two text
+              // lines always fit, even on narrow phones or with larger fonts.
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                mainAxisExtent: 140 * MediaQuery.textScalerOf(context).scale(1).clamp(1.0, 1.6),
+              ),
               children: [
                 for (var i = 0; i < places.length; i++)
                   FadeSlideIn(

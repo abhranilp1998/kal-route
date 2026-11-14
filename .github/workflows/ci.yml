@@ -159,11 +159,16 @@ jobs:
       - name: Pre-build debug APK
         run: flutter build apk --debug
       - name: Run integration_test on emulator
+        timeout-minutes: 30
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 34
           target: google_apis
           arch: x86_64
+          # Nexus 5: 360x640 dp, a common small-phone size. Without a profile the
+          # AVD is 320x640 px at ~256 dp wide, smaller than any phone we target;
+          # 320 dp coverage comes from the 320x640 web integration run.
+          profile: Nexus 5
           ram-size: 4096M
           disk-size: 6000M
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none

@@ -189,8 +189,14 @@ class _AddTripSheetState extends ConsumerState<AddTripSheet> {
               const SizedBox(width: 8),
               Text('LEAVE', style: AppText.eyebrow(AppColors.amber.withValues(alpha: 0.8))),
               const SizedBox(width: 8),
-              Text('arrive ${fmtTime(r.arriveAt)}', style: AppText.body(size: 12, color: AppColors.muted)),
-              const Spacer(),
+              Expanded(
+                child: Text(
+                  'arrive ${fmtTime(r.arriveAt)}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppText.body(size: 12, color: AppColors.muted),
+                ),
+              ),
               Text('${r.totalMinutes} min · ₹${r.fare}', style: AppText.body(size: 13, color: AppColors.muted)),
             ],
           ),
