@@ -17,9 +17,7 @@ class $PlacesTable extends Places with TableInfo<$PlacesTable, PlaceRow> {
     hasAutoIncrement: true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -27,10 +25,7 @@ class $PlacesTable extends Places with TableInfo<$PlacesTable, PlaceRow> {
     'name',
     aliasedName,
     false,
-    additionalChecks: GeneratedColumn.checkTextLength(
-      minTextLength: 1,
-      maxTextLength: 60,
-    ),
+    additionalChecks: GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 60),
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
@@ -52,9 +47,7 @@ class $PlacesTable extends Places with TableInfo<$PlacesTable, PlaceRow> {
     type: DriftSqlType.double,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _addressMeta = const VerificationMeta(
-    'address',
-  );
+  static const VerificationMeta _addressMeta = const VerificationMeta('address');
   @override
   late final GeneratedColumn<String> address = GeneratedColumn<String>(
     'address',
@@ -73,9 +66,7 @@ class $PlacesTable extends Places with TableInfo<$PlacesTable, PlaceRow> {
     requiredDuringInsert: false,
     defaultValue: const Constant('📍'),
   );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta('createdAt');
   @override
   late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
     'created_at',
@@ -86,71 +77,42 @@ class $PlacesTable extends Places with TableInfo<$PlacesTable, PlaceRow> {
     defaultValue: currentDateAndTime,
   );
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    name,
-    lat,
-    lng,
-    address,
-    emoji,
-    createdAt,
-  ];
+  List<GeneratedColumn> get $columns => [id, name, lat, lng, address, emoji, createdAt];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'places';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<PlaceRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<PlaceRow> instance, {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
+      context.handle(_nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('lat')) {
-      context.handle(
-        _latMeta,
-        lat.isAcceptableOrUnknown(data['lat']!, _latMeta),
-      );
+      context.handle(_latMeta, lat.isAcceptableOrUnknown(data['lat']!, _latMeta));
     } else if (isInserting) {
       context.missing(_latMeta);
     }
     if (data.containsKey('lng')) {
-      context.handle(
-        _lngMeta,
-        lng.isAcceptableOrUnknown(data['lng']!, _lngMeta),
-      );
+      context.handle(_lngMeta, lng.isAcceptableOrUnknown(data['lng']!, _lngMeta));
     } else if (isInserting) {
       context.missing(_lngMeta);
     }
     if (data.containsKey('address')) {
-      context.handle(
-        _addressMeta,
-        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
-      );
+      context.handle(_addressMeta, address.isAcceptableOrUnknown(data['address']!, _addressMeta));
     }
     if (data.containsKey('emoji')) {
-      context.handle(
-        _emojiMeta,
-        emoji.isAcceptableOrUnknown(data['emoji']!, _emojiMeta),
-      );
+      context.handle(_emojiMeta, emoji.isAcceptableOrUnknown(data['emoji']!, _emojiMeta));
     }
     if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
+      context.handle(_createdAtMeta, createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
     }
     return context;
   }
@@ -161,34 +123,13 @@ class $PlacesTable extends Places with TableInfo<$PlacesTable, PlaceRow> {
   PlaceRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return PlaceRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      )!,
-      lat: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}lat'],
-      )!,
-      lng: attachedDatabase.typeMapping.read(
-        DriftSqlType.double,
-        data['${effectivePrefix}lng'],
-      )!,
-      address: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}address'],
-      ),
-      emoji: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}emoji'],
-      )!,
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
+      id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      lat: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}lat'])!,
+      lng: attachedDatabase.typeMapping.read(DriftSqlType.double, data['${effectivePrefix}lng'])!,
+      address: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}address']),
+      emoji: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}emoji'])!,
+      createdAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -236,18 +177,13 @@ class PlaceRow extends DataClass implements Insertable<PlaceRow> {
       name: Value(name),
       lat: Value(lat),
       lng: Value(lng),
-      address: address == null && nullToAbsent
-          ? const Value.absent()
-          : Value(address),
+      address: address == null && nullToAbsent ? const Value.absent() : Value(address),
       emoji: Value(emoji),
       createdAt: Value(createdAt),
     );
   }
 
-  factory PlaceRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory PlaceRow.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return PlaceRow(
       id: serializer.fromJson<int>(json['id']),
@@ -317,8 +253,7 @@ class PlaceRow extends DataClass implements Insertable<PlaceRow> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, name, lat, lng, address, emoji, createdAt);
+  int get hashCode => Object.hash(id, name, lat, lng, address, emoji, createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -456,9 +391,7 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     hasAutoIncrement: true,
     type: DriftSqlType.int,
     requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'),
   );
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
@@ -469,9 +402,7 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _fromPlaceIdMeta = const VerificationMeta(
-    'fromPlaceId',
-  );
+  static const VerificationMeta _fromPlaceIdMeta = const VerificationMeta('fromPlaceId');
   @override
   late final GeneratedColumn<int> fromPlaceId = GeneratedColumn<int>(
     'from_place_id',
@@ -479,13 +410,9 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES places (id) ON DELETE CASCADE',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('REFERENCES places (id) ON DELETE CASCADE'),
   );
-  static const VerificationMeta _toPlaceIdMeta = const VerificationMeta(
-    'toPlaceId',
-  );
+  static const VerificationMeta _toPlaceIdMeta = const VerificationMeta('toPlaceId');
   @override
   late final GeneratedColumn<int> toPlaceId = GeneratedColumn<int>(
     'to_place_id',
@@ -493,13 +420,9 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES places (id) ON DELETE CASCADE',
-    ),
+    defaultConstraints: GeneratedColumn.constraintIsAlways('REFERENCES places (id) ON DELETE CASCADE'),
   );
-  static const VerificationMeta _arriveByMeta = const VerificationMeta(
-    'arriveBy',
-  );
+  static const VerificationMeta _arriveByMeta = const VerificationMeta('arriveBy');
   @override
   late final GeneratedColumn<DateTime> arriveBy = GeneratedColumn<DateTime>(
     'arrive_by',
@@ -509,18 +432,15 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     requiredDuringInsert: true,
   );
   @override
-  late final GeneratedColumnWithTypeConverter<TripStatus, String> status =
-      GeneratedColumn<String>(
-        'status',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-        defaultValue: Constant(TripStatus.planned.name),
-      ).withConverter<TripStatus>($TripsTable.$converterstatus);
-  static const VerificationMeta _leaveAtMeta = const VerificationMeta(
-    'leaveAt',
-  );
+  late final GeneratedColumnWithTypeConverter<TripStatus, String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: Constant(TripStatus.planned.name),
+  ).withConverter<TripStatus>($TripsTable.$converterstatus);
+  static const VerificationMeta _leaveAtMeta = const VerificationMeta('leaveAt');
   @override
   late final GeneratedColumn<DateTime> leaveAt = GeneratedColumn<DateTime>(
     'leave_at',
@@ -529,9 +449,7 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _bufferMinutesMeta = const VerificationMeta(
-    'bufferMinutes',
-  );
+  static const VerificationMeta _bufferMinutesMeta = const VerificationMeta('bufferMinutes');
   @override
   late final GeneratedColumn<int> bufferMinutes = GeneratedColumn<int>(
     'buffer_minutes',
@@ -541,9 +459,7 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     requiredDuringInsert: false,
     defaultValue: const Constant(0),
   );
-  static const VerificationMeta _routeJsonMeta = const VerificationMeta(
-    'routeJson',
-  );
+  static const VerificationMeta _routeJsonMeta = const VerificationMeta('routeJson');
   @override
   late final GeneratedColumn<String> routeJson = GeneratedColumn<String>(
     'route_json',
@@ -552,21 +468,16 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _routeFetchedAtMeta = const VerificationMeta(
-    'routeFetchedAt',
-  );
+  static const VerificationMeta _routeFetchedAtMeta = const VerificationMeta('routeFetchedAt');
   @override
-  late final GeneratedColumn<DateTime> routeFetchedAt =
-      GeneratedColumn<DateTime>(
-        'route_fetched_at',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
-  static const VerificationMeta _routeSourceMeta = const VerificationMeta(
-    'routeSource',
+  late final GeneratedColumn<DateTime> routeFetchedAt = GeneratedColumn<DateTime>(
+    'route_fetched_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
   );
+  static const VerificationMeta _routeSourceMeta = const VerificationMeta('routeSource');
   @override
   late final GeneratedColumn<String> routeSource = GeneratedColumn<String>(
     'route_source',
@@ -595,88 +506,52 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
   String get actualTableName => $name;
   static const String $name = 'trips';
   @override
-  VerificationContext validateIntegrity(
-    Insertable<TripRow> instance, {
-    bool isInserting = false,
-  }) {
+  VerificationContext validateIntegrity(Insertable<TripRow> instance, {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('date')) {
-      context.handle(
-        _dateMeta,
-        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
-      );
+      context.handle(_dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
     if (data.containsKey('from_place_id')) {
-      context.handle(
-        _fromPlaceIdMeta,
-        fromPlaceId.isAcceptableOrUnknown(
-          data['from_place_id']!,
-          _fromPlaceIdMeta,
-        ),
-      );
+      context.handle(_fromPlaceIdMeta, fromPlaceId.isAcceptableOrUnknown(data['from_place_id']!, _fromPlaceIdMeta));
     } else if (isInserting) {
       context.missing(_fromPlaceIdMeta);
     }
     if (data.containsKey('to_place_id')) {
-      context.handle(
-        _toPlaceIdMeta,
-        toPlaceId.isAcceptableOrUnknown(data['to_place_id']!, _toPlaceIdMeta),
-      );
+      context.handle(_toPlaceIdMeta, toPlaceId.isAcceptableOrUnknown(data['to_place_id']!, _toPlaceIdMeta));
     } else if (isInserting) {
       context.missing(_toPlaceIdMeta);
     }
     if (data.containsKey('arrive_by')) {
-      context.handle(
-        _arriveByMeta,
-        arriveBy.isAcceptableOrUnknown(data['arrive_by']!, _arriveByMeta),
-      );
+      context.handle(_arriveByMeta, arriveBy.isAcceptableOrUnknown(data['arrive_by']!, _arriveByMeta));
     } else if (isInserting) {
       context.missing(_arriveByMeta);
     }
     if (data.containsKey('leave_at')) {
-      context.handle(
-        _leaveAtMeta,
-        leaveAt.isAcceptableOrUnknown(data['leave_at']!, _leaveAtMeta),
-      );
+      context.handle(_leaveAtMeta, leaveAt.isAcceptableOrUnknown(data['leave_at']!, _leaveAtMeta));
     }
     if (data.containsKey('buffer_minutes')) {
       context.handle(
         _bufferMinutesMeta,
-        bufferMinutes.isAcceptableOrUnknown(
-          data['buffer_minutes']!,
-          _bufferMinutesMeta,
-        ),
+        bufferMinutes.isAcceptableOrUnknown(data['buffer_minutes']!, _bufferMinutesMeta),
       );
     }
     if (data.containsKey('route_json')) {
-      context.handle(
-        _routeJsonMeta,
-        routeJson.isAcceptableOrUnknown(data['route_json']!, _routeJsonMeta),
-      );
+      context.handle(_routeJsonMeta, routeJson.isAcceptableOrUnknown(data['route_json']!, _routeJsonMeta));
     }
     if (data.containsKey('route_fetched_at')) {
       context.handle(
         _routeFetchedAtMeta,
-        routeFetchedAt.isAcceptableOrUnknown(
-          data['route_fetched_at']!,
-          _routeFetchedAtMeta,
-        ),
+        routeFetchedAt.isAcceptableOrUnknown(data['route_fetched_at']!, _routeFetchedAtMeta),
       );
     }
     if (data.containsKey('route_source')) {
-      context.handle(
-        _routeSourceMeta,
-        routeSource.isAcceptableOrUnknown(
-          data['route_source']!,
-          _routeSourceMeta,
-        ),
-      );
+      context.handle(_routeSourceMeta, routeSource.isAcceptableOrUnknown(data['route_source']!, _routeSourceMeta));
     }
     return context;
   }
@@ -687,52 +562,22 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
   TripRow map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return TripRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      date: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}date'],
-      )!,
-      fromPlaceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}from_place_id'],
-      )!,
-      toPlaceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}to_place_id'],
-      )!,
-      arriveBy: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}arrive_by'],
-      )!,
+      id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      date: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}date'])!,
+      fromPlaceId: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}from_place_id'])!,
+      toPlaceId: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}to_place_id'])!,
+      arriveBy: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}arrive_by'])!,
       status: $TripsTable.$converterstatus.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}status'],
-        )!,
+        attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}status'])!,
       ),
-      leaveAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}leave_at'],
-      ),
-      bufferMinutes: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}buffer_minutes'],
-      )!,
-      routeJson: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}route_json'],
-      ),
+      leaveAt: attachedDatabase.typeMapping.read(DriftSqlType.dateTime, data['${effectivePrefix}leave_at']),
+      bufferMinutes: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}buffer_minutes'])!,
+      routeJson: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}route_json']),
       routeFetchedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}route_fetched_at'],
       ),
-      routeSource: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}route_source'],
-      ),
+      routeSource: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}route_source']),
     );
   }
 
@@ -741,8 +586,9 @@ class $TripsTable extends Trips with TableInfo<$TripsTable, TripRow> {
     return $TripsTable(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<TripStatus, String, String> $converterstatus =
-      const EnumNameConverter<TripStatus>(TripStatus.values);
+  static JsonTypeConverter2<TripStatus, String, String> $converterstatus = const EnumNameConverter<TripStatus>(
+    TripStatus.values,
+  );
 }
 
 class TripRow extends DataClass implements Insertable<TripRow> {
@@ -787,9 +633,7 @@ class TripRow extends DataClass implements Insertable<TripRow> {
     map['to_place_id'] = Variable<int>(toPlaceId);
     map['arrive_by'] = Variable<DateTime>(arriveBy);
     {
-      map['status'] = Variable<String>(
-        $TripsTable.$converterstatus.toSql(status),
-      );
+      map['status'] = Variable<String>($TripsTable.$converterstatus.toSql(status));
     }
     if (!nullToAbsent || leaveAt != null) {
       map['leave_at'] = Variable<DateTime>(leaveAt);
@@ -815,26 +659,15 @@ class TripRow extends DataClass implements Insertable<TripRow> {
       toPlaceId: Value(toPlaceId),
       arriveBy: Value(arriveBy),
       status: Value(status),
-      leaveAt: leaveAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(leaveAt),
+      leaveAt: leaveAt == null && nullToAbsent ? const Value.absent() : Value(leaveAt),
       bufferMinutes: Value(bufferMinutes),
-      routeJson: routeJson == null && nullToAbsent
-          ? const Value.absent()
-          : Value(routeJson),
-      routeFetchedAt: routeFetchedAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(routeFetchedAt),
-      routeSource: routeSource == null && nullToAbsent
-          ? const Value.absent()
-          : Value(routeSource),
+      routeJson: routeJson == null && nullToAbsent ? const Value.absent() : Value(routeJson),
+      routeFetchedAt: routeFetchedAt == null && nullToAbsent ? const Value.absent() : Value(routeFetchedAt),
+      routeSource: routeSource == null && nullToAbsent ? const Value.absent() : Value(routeSource),
     );
   }
 
-  factory TripRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
+  factory TripRow.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return TripRow(
       id: serializer.fromJson<int>(json['id']),
@@ -842,9 +675,7 @@ class TripRow extends DataClass implements Insertable<TripRow> {
       fromPlaceId: serializer.fromJson<int>(json['fromPlaceId']),
       toPlaceId: serializer.fromJson<int>(json['toPlaceId']),
       arriveBy: serializer.fromJson<DateTime>(json['arriveBy']),
-      status: $TripsTable.$converterstatus.fromJson(
-        serializer.fromJson<String>(json['status']),
-      ),
+      status: $TripsTable.$converterstatus.fromJson(serializer.fromJson<String>(json['status'])),
       leaveAt: serializer.fromJson<DateTime?>(json['leaveAt']),
       bufferMinutes: serializer.fromJson<int>(json['bufferMinutes']),
       routeJson: serializer.fromJson<String?>(json['routeJson']),
@@ -861,9 +692,7 @@ class TripRow extends DataClass implements Insertable<TripRow> {
       'fromPlaceId': serializer.toJson<int>(fromPlaceId),
       'toPlaceId': serializer.toJson<int>(toPlaceId),
       'arriveBy': serializer.toJson<DateTime>(arriveBy),
-      'status': serializer.toJson<String>(
-        $TripsTable.$converterstatus.toJson(status),
-      ),
+      'status': serializer.toJson<String>($TripsTable.$converterstatus.toJson(status)),
       'leaveAt': serializer.toJson<DateTime?>(leaveAt),
       'bufferMinutes': serializer.toJson<int>(bufferMinutes),
       'routeJson': serializer.toJson<String?>(routeJson),
@@ -894,32 +723,22 @@ class TripRow extends DataClass implements Insertable<TripRow> {
     leaveAt: leaveAt.present ? leaveAt.value : this.leaveAt,
     bufferMinutes: bufferMinutes ?? this.bufferMinutes,
     routeJson: routeJson.present ? routeJson.value : this.routeJson,
-    routeFetchedAt: routeFetchedAt.present
-        ? routeFetchedAt.value
-        : this.routeFetchedAt,
+    routeFetchedAt: routeFetchedAt.present ? routeFetchedAt.value : this.routeFetchedAt,
     routeSource: routeSource.present ? routeSource.value : this.routeSource,
   );
   TripRow copyWithCompanion(TripsCompanion data) {
     return TripRow(
       id: data.id.present ? data.id.value : this.id,
       date: data.date.present ? data.date.value : this.date,
-      fromPlaceId: data.fromPlaceId.present
-          ? data.fromPlaceId.value
-          : this.fromPlaceId,
+      fromPlaceId: data.fromPlaceId.present ? data.fromPlaceId.value : this.fromPlaceId,
       toPlaceId: data.toPlaceId.present ? data.toPlaceId.value : this.toPlaceId,
       arriveBy: data.arriveBy.present ? data.arriveBy.value : this.arriveBy,
       status: data.status.present ? data.status.value : this.status,
       leaveAt: data.leaveAt.present ? data.leaveAt.value : this.leaveAt,
-      bufferMinutes: data.bufferMinutes.present
-          ? data.bufferMinutes.value
-          : this.bufferMinutes,
+      bufferMinutes: data.bufferMinutes.present ? data.bufferMinutes.value : this.bufferMinutes,
       routeJson: data.routeJson.present ? data.routeJson.value : this.routeJson,
-      routeFetchedAt: data.routeFetchedAt.present
-          ? data.routeFetchedAt.value
-          : this.routeFetchedAt,
-      routeSource: data.routeSource.present
-          ? data.routeSource.value
-          : this.routeSource,
+      routeFetchedAt: data.routeFetchedAt.present ? data.routeFetchedAt.value : this.routeFetchedAt,
+      routeSource: data.routeSource.present ? data.routeSource.value : this.routeSource,
     );
   }
 
@@ -1088,9 +907,7 @@ class TripsCompanion extends UpdateCompanion<TripRow> {
       map['arrive_by'] = Variable<DateTime>(arriveBy.value);
     }
     if (status.present) {
-      map['status'] = Variable<String>(
-        $TripsTable.$converterstatus.toSql(status.value),
-      );
+      map['status'] = Variable<String>($TripsTable.$converterstatus.toSql(status.value));
     }
     if (leaveAt.present) {
       map['leave_at'] = Variable<DateTime>(leaveAt.value);
@@ -1134,38 +951,20 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $PlacesTable places = $PlacesTable(this);
   late final $TripsTable trips = $TripsTable(this);
-  late final Index tripsDateIdx = Index(
-    'trips_date_idx',
-    'CREATE INDEX trips_date_idx ON trips (date)',
-  );
-  late final Index tripsStatusIdx = Index(
-    'trips_status_idx',
-    'CREATE INDEX trips_status_idx ON trips (status)',
-  );
+  late final Index tripsDateIdx = Index('trips_date_idx', 'CREATE INDEX trips_date_idx ON trips (date)');
+  late final Index tripsStatusIdx = Index('trips_status_idx', 'CREATE INDEX trips_status_idx ON trips (status)');
   @override
-  Iterable<TableInfo<Table, Object?>> get allTables =>
-      allSchemaEntities.whereType<TableInfo<Table, Object?>>();
+  Iterable<TableInfo<Table, Object?>> get allTables => allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [
-    places,
-    trips,
-    tripsDateIdx,
-    tripsStatusIdx,
-  ];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [places, trips, tripsDateIdx, tripsStatusIdx];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
     WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'places',
-        limitUpdateKind: UpdateKind.delete,
-      ),
+      on: TableUpdateQuery.onTableName('places', limitUpdateKind: UpdateKind.delete),
       result: [TableUpdate('trips', kind: UpdateKind.delete)],
     ),
     WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'places',
-        limitUpdateKind: UpdateKind.delete,
-      ),
+      on: TableUpdateQuery.onTableName('places', limitUpdateKind: UpdateKind.delete),
       result: [TableUpdate('trips', kind: UpdateKind.delete)],
     ),
   ]);
@@ -1190,16 +989,11 @@ typedef $$PlacesTableUpdateCompanionBuilder = PlacesCompanion Function({
   Value<DateTime> createdAt,
 });
 
-final class $$PlacesTableReferences
-    extends BaseReferences<_$AppDatabase, $PlacesTable, PlaceRow> {
+final class $$PlacesTableReferences extends BaseReferences<_$AppDatabase, $PlacesTable, PlaceRow> {
   $$PlacesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<$TripsTable, List<TripRow>> _departingTripsTable(
-    _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.trips,
-    aliasName: 'places__id__trips__from_place_id',
-  );
+  static MultiTypedResultKey<$TripsTable, List<TripRow>> _departingTripsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.trips, aliasName: 'places__id__trips__from_place_id');
 
   $$TripsTableProcessedTableManager get departingTrips {
     final manager = $$TripsTableTableManager(
@@ -1208,17 +1002,11 @@ final class $$PlacesTableReferences
     ).filter((f) => f.fromPlaceId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_departingTripsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
+    return ProcessedTableManager(manager.$state.copyWith(prefetchedData: cache));
   }
 
-  static MultiTypedResultKey<$TripsTable, List<TripRow>> _arrivingTripsTable(
-    _$AppDatabase db,
-  ) => MultiTypedResultKey.fromTable(
-    db.trips,
-    aliasName: 'places__id__trips__to_place_id',
-  );
+  static MultiTypedResultKey<$TripsTable, List<TripRow>> _arrivingTripsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.trips, aliasName: 'places__id__trips__to_place_id');
 
   $$TripsTableProcessedTableManager get arrivingTrips {
     final manager = $$TripsTableTableManager(
@@ -1227,14 +1015,11 @@ final class $$PlacesTableReferences
     ).filter((f) => f.toPlaceId.id.sqlEquals($_itemColumn<int>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_arrivingTripsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
+    return ProcessedTableManager(manager.$state.copyWith(prefetchedData: cache));
   }
 }
 
-class $$PlacesTableFilterComposer
-    extends Composer<_$AppDatabase, $PlacesTable> {
+class $$PlacesTableFilterComposer extends Composer<_$AppDatabase, $PlacesTable> {
   $$PlacesTableFilterComposer({
     required super.$db,
     required super.$table,
@@ -1242,94 +1027,61 @@ class $$PlacesTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get name => $composableBuilder(column: $table.name, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get lat => $composableBuilder(
-    column: $table.lat,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<double> get lat => $composableBuilder(column: $table.lat, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get lng => $composableBuilder(
-    column: $table.lng,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<double> get lng => $composableBuilder(column: $table.lng, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get address => $composableBuilder(
-    column: $table.address,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get emoji => $composableBuilder(
-    column: $table.emoji,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnFilters(column));
 
-  Expression<bool> departingTrips(
-    Expression<bool> Function($$TripsTableFilterComposer f) f,
-  ) {
+  Expression<bool> departingTrips(Expression<bool> Function($$TripsTableFilterComposer f) f) {
     final $$TripsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.trips,
       getReferencedColumn: (t) => t.fromPlaceId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TripsTableFilterComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$TripsTableFilterComposer(
             $db: $db,
             $table: $db.trips,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return f(composer);
   }
 
-  Expression<bool> arrivingTrips(
-    Expression<bool> Function($$TripsTableFilterComposer f) f,
-  ) {
+  Expression<bool> arrivingTrips(Expression<bool> Function($$TripsTableFilterComposer f) f) {
     final $$TripsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.trips,
       getReferencedColumn: (t) => t.toPlaceId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TripsTableFilterComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$TripsTableFilterComposer(
             $db: $db,
             $table: $db.trips,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return f(composer);
   }
 }
 
-class $$PlacesTableOrderingComposer
-    extends Composer<_$AppDatabase, $PlacesTable> {
+class $$PlacesTableOrderingComposer extends Composer<_$AppDatabase, $PlacesTable> {
   $$PlacesTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -1337,44 +1089,28 @@ class $$PlacesTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get lat => $composableBuilder(
-    column: $table.lat,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<double> get lat =>
+      $composableBuilder(column: $table.lat, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get lng => $composableBuilder(
-    column: $table.lng,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<double> get lng =>
+      $composableBuilder(column: $table.lng, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get address => $composableBuilder(
-    column: $table.address,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get emoji => $composableBuilder(
-    column: $table.emoji,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 }
 
-class $$PlacesTableAnnotationComposer
-    extends Composer<_$AppDatabase, $PlacesTable> {
+class $$PlacesTableAnnotationComposer extends Composer<_$AppDatabase, $PlacesTable> {
   $$PlacesTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -1382,72 +1118,51 @@ class $$PlacesTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<int> get id => $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
+  GeneratedColumn<String> get name => $composableBuilder(column: $table.name, builder: (column) => column);
 
-  GeneratedColumn<double> get lat =>
-      $composableBuilder(column: $table.lat, builder: (column) => column);
+  GeneratedColumn<double> get lat => $composableBuilder(column: $table.lat, builder: (column) => column);
 
-  GeneratedColumn<double> get lng =>
-      $composableBuilder(column: $table.lng, builder: (column) => column);
+  GeneratedColumn<double> get lng => $composableBuilder(column: $table.lng, builder: (column) => column);
 
-  GeneratedColumn<String> get address =>
-      $composableBuilder(column: $table.address, builder: (column) => column);
+  GeneratedColumn<String> get address => $composableBuilder(column: $table.address, builder: (column) => column);
 
-  GeneratedColumn<String> get emoji =>
-      $composableBuilder(column: $table.emoji, builder: (column) => column);
+  GeneratedColumn<String> get emoji => $composableBuilder(column: $table.emoji, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+  GeneratedColumn<DateTime> get createdAt => $composableBuilder(column: $table.createdAt, builder: (column) => column);
 
-  Expression<T> departingTrips<T extends Object>(
-    Expression<T> Function($$TripsTableAnnotationComposer a) f,
-  ) {
+  Expression<T> departingTrips<T extends Object>(Expression<T> Function($$TripsTableAnnotationComposer a) f) {
     final $$TripsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.trips,
       getReferencedColumn: (t) => t.fromPlaceId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TripsTableAnnotationComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$TripsTableAnnotationComposer(
             $db: $db,
             $table: $db.trips,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return f(composer);
   }
 
-  Expression<T> arrivingTrips<T extends Object>(
-    Expression<T> Function($$TripsTableAnnotationComposer a) f,
-  ) {
+  Expression<T> arrivingTrips<T extends Object>(Expression<T> Function($$TripsTableAnnotationComposer a) f) {
     final $$TripsTableAnnotationComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.id,
       referencedTable: $db.trips,
       getReferencedColumn: (t) => t.toPlaceId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TripsTableAnnotationComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$TripsTableAnnotationComposer(
             $db: $db,
             $table: $db.trips,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return f(composer);
@@ -1474,12 +1189,9 @@ class $$PlacesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$PlacesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$PlacesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$PlacesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () => $$PlacesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$PlacesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$PlacesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
@@ -1517,68 +1229,37 @@ class $$PlacesTableTableManager
                 createdAt: createdAt,
               ),
           withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$PlacesTable, PlaceRow>(table),
-                  $$PlacesTableReferences(db, table, e),
-                ),
-              )
+              .map((e) => (e.readTable<$PlacesTable, PlaceRow>(table), $$PlacesTableReferences(db, table, e)))
               .toList(),
-          prefetchHooksCallback:
-              ({departingTrips = false, arrivingTrips = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (departingTrips) db.trips,
-                    if (arrivingTrips) db.trips,
-                  ],
-                  addJoins: null,
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (departingTrips)
-                        await $_getPrefetchedDataByColumns<
-                          PlaceRow,
-                          $PlacesTable,
-                          TripRow,
-                          $TripsTable
-                        >(
-                          currentTable: table,
-                          referencedTable: $$PlacesTableReferences
-                              ._departingTripsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$PlacesTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).departingTrips,
-                          currentColumn: 'id',
-                          referencedColumn: 'from_place_id',
-                          typedResults: items,
-                        ),
-                      if (arrivingTrips)
-                        await $_getPrefetchedDataByColumns<
-                          PlaceRow,
-                          $PlacesTable,
-                          TripRow,
-                          $TripsTable
-                        >(
-                          currentTable: table,
-                          referencedTable: $$PlacesTableReferences
-                              ._arrivingTripsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$PlacesTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).arrivingTrips,
-                          currentColumn: 'id',
-                          referencedColumn: 'to_place_id',
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
+          prefetchHooksCallback: ({departingTrips = false, arrivingTrips = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (departingTrips) db.trips, if (arrivingTrips) db.trips],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (departingTrips)
+                    await $_getPrefetchedDataByColumns<PlaceRow, $PlacesTable, TripRow, $TripsTable>(
+                      currentTable: table,
+                      referencedTable: $$PlacesTableReferences._departingTripsTable(db),
+                      managerFromTypedResult: (p0) => $$PlacesTableReferences(db, table, p0).departingTrips,
+                      currentColumn: 'id',
+                      referencedColumn: 'from_place_id',
+                      typedResults: items,
+                    ),
+                  if (arrivingTrips)
+                    await $_getPrefetchedDataByColumns<PlaceRow, $PlacesTable, TripRow, $TripsTable>(
+                      currentTable: table,
+                      referencedTable: $$PlacesTableReferences._arrivingTripsTable(db),
+                      managerFromTypedResult: (p0) => $$PlacesTableReferences(db, table, p0).arrivingTrips,
+                      currentColumn: 'id',
+                      referencedColumn: 'to_place_id',
+                      typedResults: items,
+                    ),
+                ];
               },
+            );
+          },
         ),
       );
 }
@@ -1624,42 +1305,29 @@ typedef $$TripsTableUpdateCompanionBuilder = TripsCompanion Function({
   Value<String?> routeSource,
 });
 
-final class $$TripsTableReferences
-    extends BaseReferences<_$AppDatabase, $TripsTable, TripRow> {
+final class $$TripsTableReferences extends BaseReferences<_$AppDatabase, $TripsTable, TripRow> {
   $$TripsTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static $PlacesTable _fromPlaceIdTable(_$AppDatabase db) =>
-      db.places.createAlias('trips__from_place_id__places__id');
+  static $PlacesTable _fromPlaceIdTable(_$AppDatabase db) => db.places.createAlias('trips__from_place_id__places__id');
 
   $$PlacesTableProcessedTableManager get fromPlaceId {
     final $_column = $_itemColumn<int>('from_place_id')!;
 
-    final manager = $$PlacesTableTableManager(
-      $_db,
-      $_db.places,
-    ).filter((f) => f.id.sqlEquals($_column));
+    final manager = $$PlacesTableTableManager($_db, $_db.places).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fromPlaceIdTable($_db));
     if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
+    return ProcessedTableManager(manager.$state.copyWith(prefetchedData: [item]));
   }
 
-  static $PlacesTable _toPlaceIdTable(_$AppDatabase db) =>
-      db.places.createAlias('trips__to_place_id__places__id');
+  static $PlacesTable _toPlaceIdTable(_$AppDatabase db) => db.places.createAlias('trips__to_place_id__places__id');
 
   $$PlacesTableProcessedTableManager get toPlaceId {
     final $_column = $_itemColumn<int>('to_place_id')!;
 
-    final manager = $$PlacesTableTableManager(
-      $_db,
-      $_db.places,
-    ).filter((f) => f.id.sqlEquals($_column));
+    final manager = $$PlacesTableTableManager($_db, $_db.places).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_toPlaceIdTable($_db));
     if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
+    return ProcessedTableManager(manager.$state.copyWith(prefetchedData: [item]));
   }
 }
 
@@ -1671,51 +1339,31 @@ class $$TripsTableFilterComposer extends Composer<_$AppDatabase, $TripsTable> {
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get arriveBy => $composableBuilder(
-    column: $table.arriveBy,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get arriveBy =>
+      $composableBuilder(column: $table.arriveBy, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<TripStatus, TripStatus, String> get status =>
-      $composableBuilder(
-        column: $table.status,
-        builder: (column) => ColumnWithTypeConverterFilters(column),
-      );
+      $composableBuilder(column: $table.status, builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<DateTime> get leaveAt => $composableBuilder(
-    column: $table.leaveAt,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get leaveAt =>
+      $composableBuilder(column: $table.leaveAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get bufferMinutes => $composableBuilder(
-    column: $table.bufferMinutes,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<int> get bufferMinutes =>
+      $composableBuilder(column: $table.bufferMinutes, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get routeJson => $composableBuilder(
-    column: $table.routeJson,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get routeJson =>
+      $composableBuilder(column: $table.routeJson, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get routeFetchedAt => $composableBuilder(
-    column: $table.routeFetchedAt,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<DateTime> get routeFetchedAt =>
+      $composableBuilder(column: $table.routeFetchedAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get routeSource => $composableBuilder(
-    column: $table.routeSource,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnFilters<String> get routeSource =>
+      $composableBuilder(column: $table.routeSource, builder: (column) => ColumnFilters(column));
 
   $$PlacesTableFilterComposer get fromPlaceId {
     final $$PlacesTableFilterComposer composer = $composerBuilder(
@@ -1723,18 +1371,13 @@ class $$TripsTableFilterComposer extends Composer<_$AppDatabase, $TripsTable> {
       getCurrentColumn: (t) => t.fromPlaceId,
       referencedTable: $db.places,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlacesTableFilterComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$PlacesTableFilterComposer(
             $db: $db,
             $table: $db.places,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return composer;
@@ -1746,26 +1389,20 @@ class $$TripsTableFilterComposer extends Composer<_$AppDatabase, $TripsTable> {
       getCurrentColumn: (t) => t.toPlaceId,
       referencedTable: $db.places,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlacesTableFilterComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$PlacesTableFilterComposer(
             $db: $db,
             $table: $db.places,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return composer;
   }
 }
 
-class $$TripsTableOrderingComposer
-    extends Composer<_$AppDatabase, $TripsTable> {
+class $$TripsTableOrderingComposer extends Composer<_$AppDatabase, $TripsTable> {
   $$TripsTableOrderingComposer({
     required super.$db,
     required super.$table,
@@ -1773,50 +1410,31 @@ class $$TripsTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get id => $composableBuilder(column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get arriveBy => $composableBuilder(
-    column: $table.arriveBy,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get arriveBy =>
+      $composableBuilder(column: $table.arriveBy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get status => $composableBuilder(
-    column: $table.status,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get leaveAt => $composableBuilder(
-    column: $table.leaveAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get leaveAt =>
+      $composableBuilder(column: $table.leaveAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get bufferMinutes => $composableBuilder(
-    column: $table.bufferMinutes,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<int> get bufferMinutes =>
+      $composableBuilder(column: $table.bufferMinutes, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get routeJson => $composableBuilder(
-    column: $table.routeJson,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get routeJson =>
+      $composableBuilder(column: $table.routeJson, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get routeFetchedAt => $composableBuilder(
-    column: $table.routeFetchedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<DateTime> get routeFetchedAt =>
+      $composableBuilder(column: $table.routeFetchedAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get routeSource => $composableBuilder(
-    column: $table.routeSource,
-    builder: (column) => ColumnOrderings(column),
-  );
+  ColumnOrderings<String> get routeSource =>
+      $composableBuilder(column: $table.routeSource, builder: (column) => ColumnOrderings(column));
 
   $$PlacesTableOrderingComposer get fromPlaceId {
     final $$PlacesTableOrderingComposer composer = $composerBuilder(
@@ -1824,18 +1442,13 @@ class $$TripsTableOrderingComposer
       getCurrentColumn: (t) => t.fromPlaceId,
       referencedTable: $db.places,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlacesTableOrderingComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$PlacesTableOrderingComposer(
             $db: $db,
             $table: $db.places,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return composer;
@@ -1847,26 +1460,20 @@ class $$TripsTableOrderingComposer
       getCurrentColumn: (t) => t.toPlaceId,
       referencedTable: $db.places,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlacesTableOrderingComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$PlacesTableOrderingComposer(
             $db: $db,
             $table: $db.places,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return composer;
   }
 }
 
-class $$TripsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TripsTable> {
+class $$TripsTableAnnotationComposer extends Composer<_$AppDatabase, $TripsTable> {
   $$TripsTableAnnotationComposer({
     required super.$db,
     required super.$table,
@@ -1874,38 +1481,27 @@ class $$TripsTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
+  GeneratedColumn<int> get id => $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get date =>
-      $composableBuilder(column: $table.date, builder: (column) => column);
+  GeneratedColumn<DateTime> get date => $composableBuilder(column: $table.date, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get arriveBy =>
-      $composableBuilder(column: $table.arriveBy, builder: (column) => column);
+  GeneratedColumn<DateTime> get arriveBy => $composableBuilder(column: $table.arriveBy, builder: (column) => column);
 
   GeneratedColumnWithTypeConverter<TripStatus, String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get leaveAt =>
-      $composableBuilder(column: $table.leaveAt, builder: (column) => column);
+  GeneratedColumn<DateTime> get leaveAt => $composableBuilder(column: $table.leaveAt, builder: (column) => column);
 
-  GeneratedColumn<int> get bufferMinutes => $composableBuilder(
-    column: $table.bufferMinutes,
-    builder: (column) => column,
-  );
+  GeneratedColumn<int> get bufferMinutes =>
+      $composableBuilder(column: $table.bufferMinutes, builder: (column) => column);
 
-  GeneratedColumn<String> get routeJson =>
-      $composableBuilder(column: $table.routeJson, builder: (column) => column);
+  GeneratedColumn<String> get routeJson => $composableBuilder(column: $table.routeJson, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get routeFetchedAt => $composableBuilder(
-    column: $table.routeFetchedAt,
-    builder: (column) => column,
-  );
+  GeneratedColumn<DateTime> get routeFetchedAt =>
+      $composableBuilder(column: $table.routeFetchedAt, builder: (column) => column);
 
-  GeneratedColumn<String> get routeSource => $composableBuilder(
-    column: $table.routeSource,
-    builder: (column) => column,
-  );
+  GeneratedColumn<String> get routeSource =>
+      $composableBuilder(column: $table.routeSource, builder: (column) => column);
 
   $$PlacesTableAnnotationComposer get fromPlaceId {
     final $$PlacesTableAnnotationComposer composer = $composerBuilder(
@@ -1913,18 +1509,13 @@ class $$TripsTableAnnotationComposer
       getCurrentColumn: (t) => t.fromPlaceId,
       referencedTable: $db.places,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlacesTableAnnotationComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$PlacesTableAnnotationComposer(
             $db: $db,
             $table: $db.places,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return composer;
@@ -1936,18 +1527,13 @@ class $$TripsTableAnnotationComposer
       getCurrentColumn: (t) => t.toPlaceId,
       referencedTable: $db.places,
       getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PlacesTableAnnotationComposer(
+      builder: (joinBuilder, {$addJoinBuilderToRootComposer, $removeJoinBuilderFromRootComposer}) =>
+          $$PlacesTableAnnotationComposer(
             $db: $db,
             $table: $db.places,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
+            $removeJoinBuilderFromRootComposer: $removeJoinBuilderFromRootComposer,
           ),
     );
     return composer;
@@ -1974,12 +1560,9 @@ class $$TripsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer: () =>
-              $$TripsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$TripsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$TripsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () => $$TripsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () => $$TripsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () => $$TripsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> id = const Value.absent(),
@@ -2032,14 +1615,8 @@ class $$TripsTableTableManager
                 routeFetchedAt: routeFetchedAt,
                 routeSource: routeSource,
               ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable<$TripsTable, TripRow>(table),
-                  $$TripsTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
+          withReferenceMapper: (p0) =>
+              p0.map((e) => (e.readTable<$TripsTable, TripRow>(table), $$TripsTableReferences(db, table, e))).toList(),
           prefetchHooksCallback: ({fromPlaceId = false, toPlaceId = false}) {
             return PrefetchHooks(
               db: db,
@@ -2064,23 +1641,16 @@ class $$TripsTableTableManager
                       state = state.withJoin(
                         currentTable: table,
                         currentColumn: table.fromPlaceId,
-                        referencedTable: $$TripsTableReferences
-                            ._fromPlaceIdTable(db),
-                        referencedColumn: $$TripsTableReferences
-                            ._fromPlaceIdTable(db)
-                            .id,
+                        referencedTable: $$TripsTableReferences._fromPlaceIdTable(db),
+                        referencedColumn: $$TripsTableReferences._fromPlaceIdTable(db).id,
                       ) as T;
                     }
                     if (toPlaceId) {
                       state = state.withJoin(
                         currentTable: table,
                         currentColumn: table.toPlaceId,
-                        referencedTable: $$TripsTableReferences._toPlaceIdTable(
-                          db,
-                        ),
-                        referencedColumn: $$TripsTableReferences
-                            ._toPlaceIdTable(db)
-                            .id,
+                        referencedTable: $$TripsTableReferences._toPlaceIdTable(db),
+                        referencedColumn: $$TripsTableReferences._toPlaceIdTable(db).id,
                       ) as T;
                     }
 
@@ -2113,8 +1683,6 @@ typedef $$TripsTableProcessedTableManager =
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
-  $$PlacesTableTableManager get places =>
-      $$PlacesTableTableManager(_db, _db.places);
-  $$TripsTableTableManager get trips =>
-      $$TripsTableTableManager(_db, _db.trips);
+  $$PlacesTableTableManager get places => $$PlacesTableTableManager(_db, _db.places);
+  $$TripsTableTableManager get trips => $$TripsTableTableManager(_db, _db.trips);
 }

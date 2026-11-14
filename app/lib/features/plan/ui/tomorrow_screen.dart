@@ -26,7 +26,7 @@ class TomorrowScreen extends ConsumerWidget {
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 96), // clear the FAB
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,14 +105,16 @@ class TomorrowScreen extends ConsumerWidget {
                     child: TripCard(trip: trips[i], from: places[trips[i].fromPlaceId], to: places[trips[i].toPlaceId]),
                   ),
                 ),
-            const SizedBox(height: 20),
-            FilledButton.icon(
-              onPressed: () => showAddTripSheet(context),
-              icon: const Icon(Icons.add),
-              label: const Text('Add trip'),
-            ),
           ],
         ),
+      ),
+      // Always reachable, however many trip cards push the list past the fold
+      // (on a 320 dp phone two cards already do).
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'add-trip',
+        onPressed: () => showAddTripSheet(context),
+        icon: const Icon(Icons.add),
+        label: const Text('Add trip'),
       ),
     );
   }
@@ -187,11 +189,27 @@ class TripCard extends ConsumerWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Text(from?.name ?? '?', style: AppText.body(size: 17, w: FontWeight.w600)),
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    from?.name ?? '?',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.body(size: 17, w: FontWeight.w600),
+                  ),
+                ),
                 const SizedBox(width: 10),
-                const Expanded(child: _Arrow()),
+                const Expanded(flex: 1, child: _Arrow()),
                 const SizedBox(width: 10),
-                Text(to?.name ?? '?', style: AppText.body(size: 17, w: FontWeight.w600)),
+                Flexible(
+                  flex: 3,
+                  child: Text(
+                    to?.name ?? '?',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.body(size: 17, w: FontWeight.w600),
+                  ),
+                ),
               ],
             ),
             if (route != null) ...[
@@ -222,20 +240,21 @@ class TripCard extends ConsumerWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                Text.rich(
-                  TextSpan(
-                    style: AppText.body(size: 13, color: AppColors.muted),
-                    children: [
-                      const TextSpan(text: 'arrive '),
-                      TextSpan(
-                        text: fmtTime(route?.arriveAt ?? trip.arriveBy),
-                        style: AppText.body(size: 13, w: FontWeight.w600),
-                      ),
-                      TextSpan(text: '  ·  need to be there by ${fmtTime(trip.arriveBy)}'),
-                    ],
+                Expanded(
+                  child: Text.rich(
+                    TextSpan(
+                      style: AppText.body(size: 13, color: AppColors.muted),
+                      children: [
+                        const TextSpan(text: 'arrive '),
+                        TextSpan(
+                          text: fmtTime(route?.arriveAt ?? trip.arriveBy),
+                          style: AppText.body(size: 13, w: FontWeight.w600),
+                        ),
+                        TextSpan(text: '  ·  need to be there by ${fmtTime(trip.arriveBy)}'),
+                      ],
+                    ),
                   ),
                 ),
-                const Spacer(),
                 const Icon(Icons.chevron_right, color: AppColors.muted, size: 20),
               ],
             ),

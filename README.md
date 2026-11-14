@@ -151,7 +151,7 @@ All workflows pin Flutter **3.50.0** (stable, Dart 3.14) and every action by com
 | Job | What it does |
 |---|---|
 | Codegen, format, analyze, unit tests | `pub get --enforce-lockfile`; reruns `build_runner` and fails if generated Drift code differs from what's committed; `dart format` check on hand-written code (page width 120, see `analysis_options.yaml`); `flutter analyze`; `flutter test --coverage` (lcov uploaded as `coverage-lcov`) |
-| Web integration test + web build | Builds `integration_test/app_flow_test.dart` as a web app, runs it in headless Chrome with `tools/run_it_web.js` (exits non-zero unless the log says "All tests passed!"), then `flutter build web` (artifact `web-build`) |
+| Web integration test + web build | Builds `integration_test/app_flow_test.dart` as a web app, runs it in headless Chrome at 320x640 and 390x844 with `tools/run_it_web.js` (exits non-zero unless the log says "All tests passed!"), then `flutter build web` (artifact `web-build`) |
 | Android debug APK | `flutter build apk --debug` (artifact `app-debug-apk`) |
 | Android emulator integration test | KVM-enabled API 34 x86_64 emulator via `reactivecircus/android-emulator-runner`, runs `flutter test integration_test/app_flow_test.dart` |
 

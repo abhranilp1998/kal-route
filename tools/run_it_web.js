@@ -4,19 +4,21 @@
 // the test reports "All tests passed!".
 //
 // Usage: node run_it_web.js <port> [timeoutSeconds]
-// Env:   CHROME_PATH (default /usr/bin/google-chrome), IT_SCREENSHOT_DIR (optional)
+// Env:   CHROME_PATH (default /usr/bin/google-chrome), IT_SCREENSHOT_DIR (optional),
+//        IT_VIEWPORT (WxH in CSS px, default 390x844)
 const {chromium} = require('playwright-core');
 
 const port = process.argv[2] || '8111';
 const timeoutMs = (Number(process.argv[3]) || 600) * 1000;
 const chromePath = process.env.CHROME_PATH || '/usr/bin/google-chrome';
 const shotDir = process.env.IT_SCREENSHOT_DIR;
+const [vw, vh] = (process.env.IT_VIEWPORT || '390x844').split('x').map(Number);
 
 (async () => {
   let passed = false;
   let failed = false;
   const browser = await chromium.launch({executablePath: chromePath, args: ['--no-sandbox']});
-  const ctx = await browser.newContext({viewport: {width: 390, height: 844}, deviceScaleFactor: 1});
+  const ctx = await browser.newContext({viewport: {width: vw, height: vh}, deviceScaleFactor: 1});
   const page = await ctx.newPage();
   page.on('console', (m) => {
     const t = m.text();
@@ -38,7 +40,7 @@ const shotDir = process.env.IT_SCREENSHOT_DIR;
       break; // page closed by the test harness after finishing
     }
   }
-  if (shotDir) await page.screenshot({path: `${shotDir}/it_final.png`}).catch(() => {});
+  if (shotDir) await page.screenshot({path: `${shotDir}/it_final_${vw}x${vh}.png`}).catch(() => {});
   await browser.close().catch(() => {});
 
   if (passed && !failed) {

@@ -30,6 +30,14 @@ Future<void> pumpUntil(
   fail('Timed out waiting for ${reason ?? finder}');
 }
 
+/// Scrolls [finder] into view (sheets and lists overflow on 320x640 phones)
+/// before tapping it, like a user would.
+Future<void> tapVisible(WidgetTester tester, Finder finder) async {
+  await tester.ensureVisible(finder);
+  await tester.pump(const Duration(milliseconds: 300));
+  await tester.tap(finder);
+}
+
 Future<void> pumpFor(WidgetTester tester, Duration d) async {
   final end = DateTime.now().add(d);
   while (DateTime.now().isBefore(end)) {
@@ -54,19 +62,19 @@ void main() {
     expect(await places.all(), hasLength(4), reason: 'example places seeded');
 
     // ---- Places → Add place → map picker -----------------------------------
-    await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Places')));
+    await tapVisible(tester, find.descendant(of: find.byType(NavigationBar), matching: find.text('Places')));
     await pumpUntil(tester, find.text('Add place'));
-    await tester.tap(find.text('Add place'));
+    await tapVisible(tester, find.text('Add place'));
     await pumpUntil(tester, find.byKey(const Key('place-name')));
     await tester.enterText(find.byKey(const Key('place-name')), 'Office');
-    await tester.tap(find.byKey(const Key('pick-on-map')));
+    await tapVisible(tester, find.byKey(const Key('pick-on-map')));
     await pumpUntil(tester, find.byKey(const Key('map-search')), reason: 'map picker');
 
     // Search (live Nominatim) and pick the first hit.
     await tester.enterText(find.byKey(const Key('map-search')), 'Park Street, Kolkata');
-    await tester.tap(find.byKey(const Key('map-search-go')));
+    await tapVisible(tester, find.byKey(const Key('map-search-go')));
     await pumpUntil(tester, find.byKey(const Key('search-result-0')), reason: 'search results');
-    await tester.tap(find.byKey(const Key('search-result-0')));
+    await tapVisible(tester, find.byKey(const Key('search-result-0')));
     await pumpFor(tester, const Duration(milliseconds: 500));
 
     // Drop the pin a little away from the search hit by tapping the map.
@@ -84,10 +92,10 @@ void main() {
     final pickedAddress = current();
     expect(pickedAddress, isNot(startsWith('Looking up')));
     expect(pickedAddress, isNot(contains('failed')), reason: 'reverse geocoding should work');
-    await tester.tap(find.byKey(const Key('use-location')));
+    await tapVisible(tester, find.byKey(const Key('use-location')));
     await pumpUntil(tester, find.byKey(const Key('save-place')));
     expect(find.text('Pin set'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('save-place')));
+    await tapVisible(tester, find.byKey(const Key('save-place')));
     await pumpUntil(tester, find.text('Office'), reason: 'Office tile');
 
     final office = (await places.all()).singleWhere((p) => p.name == 'Office');
@@ -96,13 +104,13 @@ void main() {
     expect(office.address, pickedAddress);
 
     // ---- Tomorrow → Add trip Home → Office ----------------------------------
-    await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Tomorrow')));
+    await tapVisible(tester, find.descendant(of: find.byType(NavigationBar), matching: find.text('Tomorrow')));
     await pumpUntil(tester, find.text('Add trip'));
-    await tester.tap(find.text('Add trip'));
+    await tapVisible(tester, find.text('Add trip'));
     await pumpUntil(tester, find.text('Plan a trip'));
-    await tester.tap(find.text('Office').last); // "To" row
+    await tapVisible(tester, find.text('Office').last); // "To" row
     await pumpUntil(tester, find.textContaining('Leave time includes'), reason: 'route preview');
-    await tester.tap(find.text('Plan it'));
+    await tapVisible(tester, find.text('Plan it'));
     await pumpFor(tester, const Duration(seconds: 1));
 
     final tomorrow = await plans.tripsOn(tomorrowDate());
@@ -114,18 +122,21 @@ void main() {
 
     // ---- Route detail --------------------------------------------------------
     await pumpUntil(tester, find.text('Office'));
-    await tester.tap(find.text('Office').first);
+    await tapVisible(tester, find.text('Office').first);
     await pumpUntil(tester, find.text('Leave Home'), reason: 'route detail timeline');
     expect(find.text('☕ Buffer'), findsOneWidget);
     expect(find.text('Set off'), findsOneWidget);
     expect(find.text(fmtTime(trip.leaveAt!)), findsWidgets, reason: 'timeline starts at the card leave time');
-    await tester.tap(find.byTooltip('Back'));
-    await pumpUntil(tester, find.text('TOMORROW'), reason: 'back on Tomorrow');
+    await tapVisible(tester, find.byTooltip('Back'));
+    // The list may be scrolled (ensureVisible above), so wait for the always-visible FAB.
+    await pumpUntil(tester, find.text('Add trip'), reason: 'back on Tomorrow');
 
     // ---- Settings → Run nightly job now -> DB updated -------------------------
-    await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Settings')));
-    await pumpUntil(tester, find.text('Run nightly job now'));
-    await tester.tap(find.text('Run nightly job now'));
+    await tapVisible(tester, find.descendant(of: find.byType(NavigationBar), matching: find.text('Settings')));
+    await pumpUntil(tester, find.text('Settings').last);
+    // Below the fold on short screens: scroll the settings list like a user would.
+    await tester.scrollUntilVisible(find.text('Run nightly job now'), 200, scrollable: find.byType(Scrollable).first);
+    await tapVisible(tester, find.text('Run nightly job now'));
     await pumpUntil(tester, find.textContaining('3 trips tomorrow'), reason: 'nightly result');
 
     final after = await plans.tripsOn(tomorrowDate());
