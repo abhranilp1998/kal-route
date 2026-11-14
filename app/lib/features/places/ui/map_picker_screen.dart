@@ -241,38 +241,44 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
                 ),
                 if (_results != null) ...[
                   const SizedBox(height: 8),
-                  Container(
+                  // A Material (not a coloured Container) so the ListTile ink
+                  // splashes paint on it instead of being hidden underneath.
+                  ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 300),
-                    decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(14)),
-                    child: _results!.isEmpty
-                        ? Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Text('No results', style: AppText.body(color: AppColors.muted)),
-                          )
-                        : ListView.separated(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemCount: _results!.length,
-                            separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.line),
-                            itemBuilder: (_, i) {
-                              final r = _results![i];
-                              return ListTile(
-                                key: Key('search-result-$i'),
-                                leading: const Icon(Icons.place_outlined, color: AppColors.amber),
-                                title: Text(r.shortName, style: AppText.body(size: 14, w: FontWeight.w600)),
-                                subtitle: Text(
-                                  r.displayName,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppText.body(size: 12, color: AppColors.muted),
-                                ),
-                                onTap: () {
-                                  setState(() => _results = null);
-                                  _goTo(LatLng(r.lat, r.lng));
-                                },
-                              );
-                            },
-                          ),
+                    child: Material(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(14),
+                      clipBehavior: Clip.antiAlias,
+                      child: _results!.isEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Text('No results', style: AppText.body(color: AppColors.muted)),
+                            )
+                          : ListView.separated(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.zero,
+                              itemCount: _results!.length,
+                              separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.line),
+                              itemBuilder: (_, i) {
+                                final r = _results![i];
+                                return ListTile(
+                                  key: Key('search-result-$i'),
+                                  leading: const Icon(Icons.place_outlined, color: AppColors.amber),
+                                  title: Text(r.shortName, style: AppText.body(size: 14, w: FontWeight.w600)),
+                                  subtitle: Text(
+                                    r.displayName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppText.body(size: 12, color: AppColors.muted),
+                                  ),
+                                  onTap: () {
+                                    setState(() => _results = null);
+                                    _goTo(LatLng(r.lat, r.lng));
+                                  },
+                                );
+                              },
+                            ),
+                    ),
                   ),
                 ],
               ],
