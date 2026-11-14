@@ -100,14 +100,14 @@ RouteResult _parseRoute(Map<String, dynamic> route) {
 }
 
 String mapVehicleType(String vehicleType) => switch (vehicleType) {
-      'SUBWAY' || 'METRO_RAIL' || 'HEAVY_RAIL' => 'METRO',
-      'BUS' || 'INTERCITY_BUS' || 'TROLLEYBUS' => 'BUS',
-      'FERRY' => 'FERRY',
-      'TRAM' => 'TRAM',
-      'COMMUTER_TRAIN' || 'RAIL' => 'TRAIN',
-      'SHARE_TAXI' => 'AUTO',
-      _ => 'OTHER',
-    };
+  'SUBWAY' || 'METRO_RAIL' || 'HEAVY_RAIL' => 'METRO',
+  'BUS' || 'INTERCITY_BUS' || 'TROLLEYBUS' => 'BUS',
+  'FERRY' => 'FERRY',
+  'TRAM' => 'TRAM',
+  'COMMUTER_TRAIN' || 'RAIL' => 'TRAIN',
+  'SHARE_TAXI' => 'AUTO',
+  _ => 'OTHER',
+};
 
 class DirectionsException implements Exception {
   DirectionsException(this.status, this.message);

@@ -32,8 +32,8 @@ class NominatimGeocoder {
     this.baseUrl = 'https://nominatim.openstreetmap.org',
     this.minInterval = const Duration(milliseconds: 1100),
     DateTime Function()? clock,
-  })  : _client = client ?? http.Client(),
-        _clock = clock ?? DateTime.now;
+  }) : _client = client ?? http.Client(),
+       _clock = clock ?? DateTime.now;
 
   static const userAgent = 'CommutePlanner/1.0 (com.abhranil.commute_planner; personal side project)';
 
@@ -96,10 +96,10 @@ class NominatimGeocoder {
       _last = _clock();
       try {
         final res = await _client
-            .get(Uri.parse('$baseUrl$path').replace(queryParameters: params), headers: {
-              if (!kIsWeb) 'User-Agent': userAgent,
-              'Accept': 'application/json',
-            })
+            .get(
+              Uri.parse('$baseUrl$path').replace(queryParameters: params),
+              headers: {if (!kIsWeb) 'User-Agent': userAgent, 'Accept': 'application/json'},
+            )
             .timeout(const Duration(seconds: 12));
         if (res.statusCode != 200) {
           throw GeocodingException('Nominatim HTTP ${res.statusCode}');
@@ -140,14 +140,21 @@ class NominatimGeocoder {
   static String shortLabel(Map<String, dynamic> j) {
     final a = (j['address'] as Map?)?.cast<String, dynamic>() ?? const {};
     final name = j['name'] as String?;
-    final first = [name, a['road'], a['pedestrian'], a['amenity'], a['building']]
-        .whereType<String>()
-        .where((s) => s.isNotEmpty)
-        .firstOrNull;
-    final area = [a['neighbourhood'], a['suburb'], a['quarter'], a['city_district'], a['city'], a['town']]
-        .whereType<String>()
-        .where((s) => s.isNotEmpty && s != first)
-        .firstOrNull;
+    final first = [
+      name,
+      a['road'],
+      a['pedestrian'],
+      a['amenity'],
+      a['building'],
+    ].whereType<String>().where((s) => s.isNotEmpty).firstOrNull;
+    final area = [
+      a['neighbourhood'],
+      a['suburb'],
+      a['quarter'],
+      a['city_district'],
+      a['city'],
+      a['town'],
+    ].whereType<String>().where((s) => s.isNotEmpty && s != first).firstOrNull;
     final parts = [first, area].whereType<String>().toList();
     if (parts.isNotEmpty) return parts.join(', ');
     return (j['display_name'] as String? ?? '').split(',').take(2).map((s) => s.trim()).join(', ');

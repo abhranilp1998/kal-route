@@ -11,14 +11,14 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Material(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onTap,
-          child: Padding(padding: padding, child: child),
-        ),
-      );
+    color: AppColors.card,
+    borderRadius: BorderRadius.circular(16),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Padding(padding: padding, child: child),
+    ),
+  );
 }
 
 /// Thin bar showing how much of the trip each mode takes. Walk = dashed.
@@ -29,25 +29,25 @@ class ModeBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ClipRRect(
-        borderRadius: BorderRadius.circular(height / 2),
-        child: SizedBox(
-          height: height,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              for (var i = 0; i < legs.length; i++) ...[
-                if (i > 0) const SizedBox(width: 2),
-                Expanded(
-                  flex: legs[i].minutes.clamp(1, 999),
-                  child: legs[i].isWalk
-                      ? CustomPaint(painter: _DashPainter(AppColors.walk))
-                      : ColoredBox(color: AppColors.forMode(legs[i].mode)),
-                ),
-              ],
-            ],
-          ),
-        ),
-      );
+    borderRadius: BorderRadius.circular(height / 2),
+    child: SizedBox(
+      height: height,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var i = 0; i < legs.length; i++) ...[
+            if (i > 0) const SizedBox(width: 2),
+            Expanded(
+              flex: legs[i].minutes.clamp(1, 999),
+              child: legs[i].isWalk
+                  ? CustomPaint(painter: _DashPainter(AppColors.walk))
+                  : ColoredBox(color: AppColors.forMode(legs[i].mode)),
+            ),
+          ],
+        ],
+      ),
+    ),
+  );
 }
 
 class _DashPainter extends CustomPainter {
@@ -70,26 +70,30 @@ class ModeDot extends StatelessWidget {
   final String mode;
   final String label;
   @override
-  Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
-        Container(
-            width: 7,
-            height: 7,
-            decoration: BoxDecoration(color: AppColors.forMode(mode), shape: BoxShape.circle)),
-        const SizedBox(width: 5),
-        Text(label, style: AppText.body(size: 12, color: AppColors.muted)),
-      ]);
+  Widget build(BuildContext context) => Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Container(
+        width: 7,
+        height: 7,
+        decoration: BoxDecoration(color: AppColors.forMode(mode), shape: BoxShape.circle),
+      ),
+      const SizedBox(width: 5),
+      Text(label, style: AppText.body(size: 12, color: AppColors.muted)),
+    ],
+  );
 }
 
 String modeLabel(String m) => switch (m) {
-      'METRO' => 'metro',
-      'BUS' => 'bus',
-      'AUTO' => 'auto',
-      'FERRY' => 'ferry',
-      'TRAIN' => 'train',
-      'TRAM' => 'tram',
-      'WALK' => 'walk',
-      _ => m.toLowerCase(),
-    };
+  'METRO' => 'metro',
+  'BUS' => 'bus',
+  'AUTO' => 'auto',
+  'FERRY' => 'ferry',
+  'TRAIN' => 'train',
+  'TRAM' => 'tram',
+  'WALK' => 'walk',
+  _ => m.toLowerCase(),
+};
 
 /// Distinct modes in order of appearance.
 List<String> modesOf(List<RouteLeg> legs) {
@@ -108,13 +112,15 @@ class FadeSlideIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TweenAnimationBuilder<double>(
-        tween: Tween(begin: 0, end: 1),
-        duration: Duration(milliseconds: 320 + delay),
-        curve: Interval(delay / (320 + delay), 1, curve: Curves.easeOutCubic),
-        builder: (context, t, child) =>
-            Opacity(opacity: t, child: Transform.translate(offset: Offset(0, 8 * (1 - t)), child: child)),
-        child: child,
-      );
+    tween: Tween(begin: 0, end: 1),
+    duration: Duration(milliseconds: 320 + delay),
+    curve: Interval(delay / (320 + delay), 1, curve: Curves.easeOutCubic),
+    builder: (context, t, child) => Opacity(
+      opacity: t,
+      child: Transform.translate(offset: Offset(0, 8 * (1 - t)), child: child),
+    ),
+    child: child,
+  );
 }
 
 class ExampleDataTag extends StatelessWidget {
@@ -132,15 +138,15 @@ class IconSquare extends StatelessWidget {
   final String? tooltip;
   @override
   Widget build(BuildContext context) => Material(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: onTap,
-          child: Tooltip(
-            message: tooltip ?? '',
-            child: SizedBox(width: 40, height: 40, child: Icon(icon, size: 20, color: AppColors.text)),
-          ),
-        ),
-      );
+    color: AppColors.card,
+    borderRadius: BorderRadius.circular(12),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Tooltip(
+        message: tooltip ?? '',
+        child: SizedBox(width: 40, height: 40, child: Icon(icon, size: 20, color: AppColors.text)),
+      ),
+    ),
+  );
 }

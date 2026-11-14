@@ -22,9 +22,8 @@ class NightlySummary {
   final String? firstFrom, firstTo;
   final int failed; // trips whose route could not be refreshed
 
-  String get title => tripCount == 0
-      ? 'Nothing planned for tomorrow'
-      : '$tripCount trip${tripCount > 1 ? 's' : ''} tomorrow';
+  String get title =>
+      tripCount == 0 ? 'Nothing planned for tomorrow' : '$tripCount trip${tripCount > 1 ? 's' : ''} tomorrow';
 
   /// Same leave time the card and the timeline show.
   String get body {
@@ -67,12 +66,14 @@ Future<NightlySummary> runNightlyPlan(AppDatabase db, DirectionsSource client, P
   final first = trips.first;
   final route = cachedRoute(first);
   Place? p(int id) => byId[id];
-  return NightlySummary(trips.length,
-      firstLeave: first.leaveAt,
-      firstArrive: route?.arriveAt,
-      firstFrom: p(first.fromPlaceId)?.name,
-      firstTo: p(first.toPlaceId)?.name,
-      failed: failed);
+  return NightlySummary(
+    trips.length,
+    firstLeave: first.leaveAt,
+    firstArrive: route?.arriveAt,
+    firstFrom: p(first.fromPlaceId)?.name,
+    firstTo: p(first.toPlaceId)?.name,
+    failed: failed,
+  );
 }
 
 @pragma('vm:entry-point')

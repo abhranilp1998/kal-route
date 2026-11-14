@@ -17,13 +17,7 @@ class Prefs {
   bool avoidLongWalks;
   String priority; // fastest, cheapest, least_changes
 
-  Prefs copyWith({
-    int? notifyHour,
-    int? notifyMinute,
-    int? bufferMinutes,
-    bool? avoidLongWalks,
-    String? priority,
-  }) =>
+  Prefs copyWith({int? notifyHour, int? notifyMinute, int? bufferMinutes, bool? avoidLongWalks, String? priority}) =>
       Prefs(
         notifyHour: notifyHour ?? this.notifyHour,
         notifyMinute: notifyMinute ?? this.notifyMinute,
@@ -33,20 +27,20 @@ class Prefs {
       );
 
   Map<String, dynamic> toJson() => {
-        'notifyHour': notifyHour,
-        'notifyMinute': notifyMinute,
-        'bufferMinutes': bufferMinutes,
-        'avoidLongWalks': avoidLongWalks,
-        'priority': priority,
-      };
+    'notifyHour': notifyHour,
+    'notifyMinute': notifyMinute,
+    'bufferMinutes': bufferMinutes,
+    'avoidLongWalks': avoidLongWalks,
+    'priority': priority,
+  };
 
   factory Prefs.fromJson(Map<String, dynamic> j) => Prefs(
-        notifyHour: j['notifyHour'] as int? ?? 21,
-        notifyMinute: j['notifyMinute'] as int? ?? 0,
-        bufferMinutes: j['bufferMinutes'] as int? ?? 5,
-        avoidLongWalks: j['avoidLongWalks'] as bool? ?? false,
-        priority: j['priority'] as String? ?? 'fastest',
-      );
+    notifyHour: j['notifyHour'] as int? ?? 21,
+    notifyMinute: j['notifyMinute'] as int? ?? 0,
+    bufferMinutes: j['bufferMinutes'] as int? ?? 5,
+    avoidLongWalks: j['avoidLongWalks'] as bool? ?? false,
+    priority: j['priority'] as String? ?? 'fastest',
+  );
 }
 
 class PrefsStore {

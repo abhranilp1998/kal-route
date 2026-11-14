@@ -31,12 +31,12 @@ class Trip {
 
   /// Legacy (v1 shared_preferences) JSON format, used only by the importer.
   factory Trip.fromLegacyJson(Map<String, dynamic> j) => Trip(
-        date: DateTime.parse(j['date'] as String),
-        fromPlaceId: j['fromPlaceId'] as int,
-        toPlaceId: j['toPlaceId'] as int,
-        arriveBy: DateTime.parse(j['arriveBy'] as String),
-        status: TripStatus.values.asNameMap()[j['status']] ?? TripStatus.planned,
-        leaveAt: j['leaveAt'] == null ? null : DateTime.parse(j['leaveAt'] as String),
-        cachedRouteJson: j['cachedRouteJson'] as String?,
-      );
+    date: DateTime.parse(j['date'] as String),
+    fromPlaceId: j['fromPlaceId'] as int,
+    toPlaceId: j['toPlaceId'] as int,
+    arriveBy: DateTime.parse(j['arriveBy'] as String),
+    status: TripStatus.values.asNameMap()[j['status']] ?? TripStatus.planned,
+    leaveAt: j['leaveAt'] == null ? null : DateTime.parse(j['leaveAt'] as String),
+    cachedRouteJson: j['cachedRouteJson'] as String?,
+  );
 }

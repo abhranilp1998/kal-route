@@ -59,22 +59,22 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (m) => m.createAll(),
-        onUpgrade: (m, from, to) async {
-          // Schema history lives in drift_schemas/ (dart run drift_dev make-migrations).
-          // When bumping schemaVersion, add a step here, e.g.
-          //   await m.runMigrationSteps(from: from, to: to, steps: migrationSteps(from1To2: ...));
-          // and regenerate the migration tests in test/drift/.
-        },
-        beforeOpen: (details) async {
-          await customStatement('PRAGMA foreign_keys = ON');
-          // Let the background (workmanager) engine and the UI engine share the
-          // file: WAL allows a reader during writes, busy_timeout waits on locks.
-          // Both are no-ops for in-memory test databases.
-          await customStatement('PRAGMA busy_timeout = 5000');
-          if (!kIsWeb) await customSelect('PRAGMA journal_mode = WAL').get();
-        },
-      );
+    onCreate: (m) => m.createAll(),
+    onUpgrade: (m, from, to) async {
+      // Schema history lives in drift_schemas/ (dart run drift_dev make-migrations).
+      // When bumping schemaVersion, add a step here, e.g.
+      //   await m.runMigrationSteps(from: from, to: to, steps: migrationSteps(from1To2: ...));
+      // and regenerate the migration tests in test/drift/.
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+      // Let the background (workmanager) engine and the UI engine share the
+      // file: WAL allows a reader during writes, busy_timeout waits on locks.
+      // Both are no-ops for in-memory test databases.
+      await customStatement('PRAGMA busy_timeout = 5000');
+      if (!kIsWeb) await customSelect('PRAGMA journal_mode = WAL').get();
+    },
+  );
 
   /// Opens the on-device database.
   ///
@@ -85,11 +85,8 @@ class AppDatabase extends _$AppDatabase {
   /// * Web: SQLite compiled to WebAssembly (web/sqlite3.wasm) persisted in
   ///   OPFS or IndexedDB, driven by web/drift_worker.js.
   static QueryExecutor openConnection({String name = defaultName}) => driftDatabase(
-        name: name,
-        native: const DriftNativeOptions(shareAcrossIsolates: true),
-        web: DriftWebOptions(
-          sqlite3Wasm: Uri.parse('sqlite3.wasm'),
-          driftWorker: Uri.parse('drift_worker.js'),
-        ),
-      );
+    name: name,
+    native: const DriftNativeOptions(shareAcrossIsolates: true),
+    web: DriftWebOptions(sqlite3Wasm: Uri.parse('sqlite3.wasm'), driftWorker: Uri.parse('drift_worker.js')),
+  );
 }

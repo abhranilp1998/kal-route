@@ -48,5 +48,4 @@ Future<RouteResult?> planTrip(
   return best;
 }
 
-RouteResult? cachedRoute(Trip t) =>
-    t.cachedRouteJson == null ? null : RouteResult.fromJson(t.cachedRouteJson!);
+RouteResult? cachedRoute(Trip t) => t.cachedRouteJson == null ? null : RouteResult.fromJson(t.cachedRouteJson!);

@@ -11,13 +11,13 @@ class PlaceRepository {
       Place(id: r.id, name: r.name, lat: r.lat, lng: r.lng, address: r.address, emoji: r.emoji);
 
   PlacesCompanion _toCompanion(Place p) => PlacesCompanion(
-        id: p.id == 0 ? const Value.absent() : Value(p.id),
-        name: Value(p.name),
-        lat: Value(p.lat),
-        lng: Value(p.lng),
-        address: Value(p.address),
-        emoji: Value(p.emoji),
-      );
+    id: p.id == 0 ? const Value.absent() : Value(p.id),
+    name: Value(p.name),
+    lat: Value(p.lat),
+    lng: Value(p.lng),
+    address: Value(p.address),
+    emoji: Value(p.emoji),
+  );
 
   SimpleSelectStatement<$PlacesTable, PlaceRow> _ordered() =>
       _db.select(_db.places)..orderBy([(t) => OrderingTerm.asc(t.id)]);

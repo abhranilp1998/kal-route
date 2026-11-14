@@ -113,9 +113,9 @@ class MockDirectionsClient implements DirectionsSource {
       var t = leaveAt;
       final built = <RouteLeg>[];
       for (final l in legs) {
-        built.add(RouteLeg(l.mode, l.line, l.from, l.to,
-            l.minutes, l.fare,
-            stops: l.stops, headsign: l.headsign, departAt: t));
+        built.add(
+          RouteLeg(l.mode, l.line, l.from, l.to, l.minutes, l.fare, stops: l.stops, headsign: l.headsign, departAt: t),
+        );
         t = t.add(Duration(minutes: l.minutes));
       }
       out.add(RouteResult(built, leaveAt, arriveAt));
@@ -124,17 +124,17 @@ class MockDirectionsClient implements DirectionsSource {
   }
 
   List<List<_L>> _generic(String from, String to) => [
-        [
-          _L('WALK', null, from, 'Main road', 5, 0),
-          _L('AUTO', 'Shared auto', 'Main road', 'Nearest stand', 18, 25, null, to),
-          _L('WALK', null, 'Nearest stand', to, 4, 0),
-        ],
-        [
-          _L('WALK', null, from, 'Bus stop', 6, 0),
-          _L('BUS', 'S-9', 'Bus stop', 'Stop near $to', 30, 15, 14, to),
-          _L('WALK', null, 'Stop near $to', to, 5, 0),
-        ],
-      ];
+    [
+      _L('WALK', null, from, 'Main road', 5, 0),
+      _L('AUTO', 'Shared auto', 'Main road', 'Nearest stand', 18, 25, null, to),
+      _L('WALK', null, 'Nearest stand', to, 4, 0),
+    ],
+    [
+      _L('WALK', null, from, 'Bus stop', 6, 0),
+      _L('BUS', 'S-9', 'Bus stop', 'Stop near $to', 30, 15, 14, to),
+      _L('WALK', null, 'Stop near $to', to, 5, 0),
+    ],
+  ];
 }
 
 class _L {

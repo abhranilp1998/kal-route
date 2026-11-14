@@ -28,44 +28,67 @@ class TomorrowScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
           children: [
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('TOMORROW', style: AppText.eyebrow()),
-                  const SizedBox(height: 4),
-                  Text(fmtDayHeader(tomorrowDate()), style: AppText.heading(28)),
-                  const SizedBox(height: 4),
-                  Text.rich(TextSpan(style: AppText.body(color: AppColors.muted), children: [
-                    TextSpan(text: trips.isEmpty ? 'No trips yet' : '${trips.length} trip${trips.length > 1 ? 's' : ''}'),
-                    if (first != null) ...[
-                      const TextSpan(text: ' · first leave '),
-                      TextSpan(
-                          text: fmtTime(first),
-                          style: AppText.body(color: AppColors.amber, w: FontWeight.w600)),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('TOMORROW', style: AppText.eyebrow()),
+                      const SizedBox(height: 4),
+                      Text(fmtDayHeader(tomorrowDate()), style: AppText.heading(28)),
+                      const SizedBox(height: 4),
+                      Text.rich(
+                        TextSpan(
+                          style: AppText.body(color: AppColors.muted),
+                          children: [
+                            TextSpan(
+                              text: trips.isEmpty
+                                  ? 'No trips yet'
+                                  : '${trips.length} trip${trips.length > 1 ? 's' : ''}',
+                            ),
+                            if (first != null) ...[
+                              const TextSpan(text: ' · first leave '),
+                              TextSpan(
+                                text: fmtTime(first),
+                                style: AppText.body(color: AppColors.amber, w: FontWeight.w600),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
                     ],
-                  ])),
-                ]),
-              ),
-              IconSquare(icon: Icons.settings_outlined, tooltip: 'Settings', onTap: () => context.go('/settings')),
-            ]),
+                  ),
+                ),
+                IconSquare(icon: Icons.settings_outlined, tooltip: 'Settings', onTap: () => context.go('/settings')),
+              ],
+            ),
             if (isMock) ...[
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
                 decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(14)),
-                child: Row(children: [
-                  const Icon(Icons.science_outlined, size: 18, color: AppColors.ferry),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text('Example Kolkata routes · no Google key set (MAPS_KEY)',
-                        style: AppText.body(size: 12.5, color: AppColors.muted)),
-                  ),
-                ]),
+                child: Row(
+                  children: [
+                    const Icon(Icons.science_outlined, size: 18, color: AppColors.ferry),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Example Kolkata routes · no Google key set (MAPS_KEY)',
+                        style: AppText.body(size: 12.5, color: AppColors.muted),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
             const SizedBox(height: 4),
             if (tripsAsync.isLoading && trips.isEmpty)
-              const Padding(padding: EdgeInsets.only(top: 60), child: Center(child: CircularProgressIndicator()))
+              const Padding(
+                padding: EdgeInsets.only(top: 60),
+                child: Center(child: CircularProgressIndicator()),
+              )
             else if (tripsAsync.hasError)
               Padding(
                 padding: const EdgeInsets.only(top: 40),
@@ -79,11 +102,7 @@ class TomorrowScreen extends ConsumerWidget {
                   padding: const EdgeInsets.only(top: 12),
                   child: FadeSlideIn(
                     delay: i * 80,
-                    child: TripCard(
-                      trip: trips[i],
-                      from: places[trips[i].fromPlaceId],
-                      to: places[trips[i].toPlaceId],
-                    ),
+                    child: TripCard(trip: trips[i], from: places[trips[i].fromPlaceId], to: places[trips[i].toPlaceId]),
                   ),
                 ),
             const SizedBox(height: 20),
@@ -103,15 +122,17 @@ class _EmptyState extends StatelessWidget {
   const _EmptyState();
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(top: 60, bottom: 20),
-        child: Column(children: [
-          const Icon(Icons.nightlight_outlined, size: 44, color: AppColors.muted),
-          const SizedBox(height: 12),
-          Text('Nothing planned for tomorrow', style: AppText.heading(18)),
-          const SizedBox(height: 6),
-          Text('Add a trip and the plan arrives the night before.', style: AppText.body(color: AppColors.muted)),
-        ]),
-      );
+    padding: const EdgeInsets.only(top: 60, bottom: 20),
+    child: Column(
+      children: [
+        const Icon(Icons.nightlight_outlined, size: 44, color: AppColors.muted),
+        const SizedBox(height: 12),
+        Text('Nothing planned for tomorrow', style: AppText.heading(18)),
+        const SizedBox(height: 6),
+        Text('Add a trip and the plan arrives the night before.', style: AppText.body(color: AppColors.muted)),
+      ],
+    ),
+  );
 }
 
 class TripCard extends ConsumerWidget {
@@ -135,70 +156,91 @@ class TripCard extends ConsumerWidget {
       onDismissed: (_) => ref.read(planActionsProvider).deleteTrip(trip.id),
       child: AppCard(
         onTap: () => context.push('/route/${trip.id}'),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(crossAxisAlignment: CrossAxisAlignment.baseline, textBaseline: TextBaseline.alphabetic, children: [
-            Hero(
-              tag: 'leave-${trip.id}',
-              child: Material(
-                type: MaterialType.transparency,
-                child: Text(leave != null ? fmtTime(leave) : '--:--', style: AppText.leave()),
-              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                Hero(
+                  tag: 'leave-${trip.id}',
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Text(leave != null ? fmtTime(leave) : '--:--', style: AppText.leave()),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text('LEAVE', style: AppText.eyebrow(AppColors.amber.withValues(alpha: 0.8))),
+                const Spacer(),
+                if (trip.bufferMinutes > 0 && leave != null)
+                  Text(
+                    'incl. ${trip.bufferMinutes} min buffer',
+                    style: AppText.body(size: 11.5, color: AppColors.muted),
+                  ),
+                if (trip.status == TripStatus.notified) ...[
+                  const SizedBox(width: 8),
+                  const Icon(Icons.notifications_active_outlined, size: 16, color: AppColors.muted),
+                ],
+              ],
             ),
-            const SizedBox(width: 10),
-            Text('LEAVE', style: AppText.eyebrow(AppColors.amber.withValues(alpha: 0.8))),
-            const Spacer(),
-            if (trip.bufferMinutes > 0 && leave != null)
-              Text('incl. ${trip.bufferMinutes} min buffer', style: AppText.body(size: 11.5, color: AppColors.muted)),
-            if (trip.status == TripStatus.notified) ...[
-              const SizedBox(width: 8),
-              const Icon(Icons.notifications_active_outlined, size: 16, color: AppColors.muted),
-            ],
-          ]),
-          const SizedBox(height: 10),
-          Row(children: [
-            Text(from?.name ?? '?', style: AppText.body(size: 17, w: FontWeight.w600)),
-            const SizedBox(width: 10),
-            const Expanded(child: _Arrow()),
-            const SizedBox(width: 10),
-            Text(to?.name ?? '?', style: AppText.body(size: 17, w: FontWeight.w600)),
-          ]),
-          if (route != null) ...[
-            const SizedBox(height: 14),
-            ModeBar(legs: route.legs),
             const SizedBox(height: 10),
-            Row(children: [
-              Expanded(
-                child: Wrap(spacing: 10, children: [
-                  for (final m in modesOf(route.legs)) ModeDot(mode: m, label: modeLabel(m)),
-                ]),
+            Row(
+              children: [
+                Text(from?.name ?? '?', style: AppText.body(size: 17, w: FontWeight.w600)),
+                const SizedBox(width: 10),
+                const Expanded(child: _Arrow()),
+                const SizedBox(width: 10),
+                Text(to?.name ?? '?', style: AppText.body(size: 17, w: FontWeight.w600)),
+              ],
+            ),
+            if (route != null) ...[
+              const SizedBox(height: 14),
+              ModeBar(legs: route.legs),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: Wrap(
+                      spacing: 10,
+                      children: [for (final m in modesOf(route.legs)) ModeDot(mode: m, label: modeLabel(m))],
+                    ),
+                  ),
+                  Text('${route.totalMinutes} min · ₹${route.fare}', style: AppText.body(size: 13, w: FontWeight.w600)),
+                ],
               ),
-              Text('${route.totalMinutes} min · ₹${route.fare}',
-                  style: AppText.body(size: 13, w: FontWeight.w600)),
-            ]),
-            if (route.walkOnly) ...[
-              const SizedBox(height: 8),
-              Text('No transit found · take an auto or cab',
-                  style: AppText.body(size: 12, color: AppColors.amber)),
+              if (route.walkOnly) ...[
+                const SizedBox(height: 8),
+                Text('No transit found · take an auto or cab', style: AppText.body(size: 12, color: AppColors.amber)),
+              ],
+            ] else ...[
+              const SizedBox(height: 12),
+              Text('Route not fetched yet · tap to retry', style: AppText.body(size: 13, color: AppColors.muted)),
             ],
-          ] else ...[
             const SizedBox(height: 12),
-            Text('Route not fetched yet · tap to retry', style: AppText.body(size: 13, color: AppColors.muted)),
+            const Divider(height: 1, color: AppColors.line),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text.rich(
+                  TextSpan(
+                    style: AppText.body(size: 13, color: AppColors.muted),
+                    children: [
+                      const TextSpan(text: 'arrive '),
+                      TextSpan(
+                        text: fmtTime(route?.arriveAt ?? trip.arriveBy),
+                        style: AppText.body(size: 13, w: FontWeight.w600),
+                      ),
+                      TextSpan(text: '  ·  need to be there by ${fmtTime(trip.arriveBy)}'),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                const Icon(Icons.chevron_right, color: AppColors.muted, size: 20),
+              ],
+            ),
           ],
-          const SizedBox(height: 12),
-          const Divider(height: 1, color: AppColors.line),
-          const SizedBox(height: 12),
-          Row(children: [
-            Text.rich(TextSpan(style: AppText.body(size: 13, color: AppColors.muted), children: [
-              const TextSpan(text: 'arrive '),
-              TextSpan(
-                  text: fmtTime(route?.arriveAt ?? trip.arriveBy),
-                  style: AppText.body(size: 13, w: FontWeight.w600)),
-              TextSpan(text: '  ·  need to be there by ${fmtTime(trip.arriveBy)}'),
-            ])),
-            const Spacer(),
-            const Icon(Icons.chevron_right, color: AppColors.muted, size: 20),
-          ]),
-        ]),
+        ),
       ),
     );
   }
@@ -208,16 +250,17 @@ class _Arrow extends StatelessWidget {
   const _Arrow();
   @override
   Widget build(BuildContext context) => SizedBox(
-        height: 10,
-        child: Row(children: [
-          Expanded(
-            child: Container(
-              height: 1,
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: [AppColors.line, AppColors.muted])),
-            ),
+    height: 10,
+    child: Row(
+      children: [
+        Expanded(
+          child: Container(
+            height: 1,
+            decoration: const BoxDecoration(gradient: LinearGradient(colors: [AppColors.line, AppColors.muted])),
           ),
-          const Icon(Icons.play_arrow_rounded, size: 10, color: AppColors.muted),
-        ]),
-      );
+        ),
+        const Icon(Icons.play_arrow_rounded, size: 10, color: AppColors.muted),
+      ],
+    ),
+  );
 }

@@ -8,5 +8,4 @@ DateTime tomorrowDate([DateTime? now]) {
   return DateTime(n.year, n.month, n.day).add(const Duration(days: 1));
 }
 
-DateTime atTime(DateTime day, int hour, int minute) =>
-    DateTime(day.year, day.month, day.day, hour, minute);
+DateTime atTime(DateTime day, int hour, int minute) => DateTime(day.year, day.month, day.day, hour, minute);

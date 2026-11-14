@@ -48,18 +48,31 @@ Timeline buildTimeline({
   final effectiveLeave = leaveAt ?? route.leaveAt.subtract(Duration(minutes: bufferMinutes));
   final buffer = route.leaveAt.difference(effectiveLeave).inMinutes;
 
-  nodes.add(TimelineNode(NodeKind.leave, effectiveLeave, 'Leave $startName',
-      subtitle: startSubtitle, mode: buffer > 0 ? null : firstMode));
+  nodes.add(
+    TimelineNode(
+      NodeKind.leave,
+      effectiveLeave,
+      'Leave $startName',
+      subtitle: startSubtitle,
+      mode: buffer > 0 ? null : firstMode,
+    ),
+  );
   if (buffer > 0) {
     segs.add(TimelineSegment.buffer(buffer));
     final firstLeg = legs.isEmpty ? null : legs.first;
-    nodes.add(TimelineNode(NodeKind.setOff, route.leaveAt, 'Set off',
+    nodes.add(
+      TimelineNode(
+        NodeKind.setOff,
+        route.leaveAt,
+        'Set off',
         subtitle: firstLeg == null
             ? null
             : firstLeg.isWalk
-                ? 'walk to ${firstLeg.to}'
-                : '${firstLeg.line ?? firstLeg.mode} from ${firstLeg.from}',
-        mode: firstMode));
+            ? 'walk to ${firstLeg.to}'
+            : '${firstLeg.line ?? firstLeg.mode} from ${firstLeg.from}',
+        mode: firstMode,
+      ),
+    );
   }
 
   var t = route.leaveAt;
@@ -70,16 +83,29 @@ Timeline buildTimeline({
     segs.add(TimelineSegment.leg(l));
     if (i == legs.length - 1) break;
     final next = legs[i + 1];
-    nodes.add(TimelineNode(NodeKind.stop, t, l.isWalk ? next.from : l.to,
-        subtitle: !next.isWalk && next.headsign != null ? 'towards ${next.headsign}' : null, mode: next.mode));
+    nodes.add(
+      TimelineNode(
+        NodeKind.stop,
+        t,
+        l.isWalk ? next.from : l.to,
+        subtitle: !next.isWalk && next.headsign != null ? 'towards ${next.headsign}' : null,
+        mode: next.mode,
+      ),
+    );
   }
   final early = arriveBy?.difference(route.arriveAt).inMinutes;
-  nodes.add(TimelineNode(NodeKind.arrive, route.arriveAt, endName,
+  nodes.add(
+    TimelineNode(
+      NodeKind.arrive,
+      route.arriveAt,
+      endName,
       subtitle: arriveBy == null
           ? null
           : (early != null && early > 0)
-              ? '$early min before ${_hm(arriveBy)}'
-              : 'need to be there by ${_hm(arriveBy)}'));
+          ? '$early min before ${_hm(arriveBy)}'
+          : 'need to be there by ${_hm(arriveBy)}',
+    ),
+  );
   return Timeline(nodes, segs);
 }
 

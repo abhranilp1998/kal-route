@@ -44,8 +44,10 @@ void main() {
 
   test('ZERO_RESULTS returns empty, errors throw', () {
     expect(parseDirectionsResponse({'status': 'ZERO_RESULTS'}), isEmpty);
-    expect(() => parseDirectionsResponse({'status': 'REQUEST_DENIED', 'error_message': 'bad key'}),
-        throwsA(isA<DirectionsException>()));
+    expect(
+      () => parseDirectionsResponse({'status': 'REQUEST_DENIED', 'error_message': 'bad key'}),
+      throwsA(isA<DirectionsException>()),
+    );
   });
 
   test('vehicle type mapping', () {

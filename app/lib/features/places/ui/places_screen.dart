@@ -23,8 +23,10 @@ class PlacesScreen extends ConsumerWidget {
             const SizedBox(height: 4),
             Text('Places', style: AppText.heading(28)),
             const SizedBox(height: 4),
-            Text('${places.length} place${places.length == 1 ? '' : 's'} · long-press to edit',
-                style: AppText.body(color: AppColors.muted)),
+            Text(
+              '${places.length} place${places.length == 1 ? '' : 's'} · long-press to edit',
+              style: AppText.body(color: AppColors.muted),
+            ),
             const SizedBox(height: 20),
             GridView.count(
               crossAxisCount: 2,
@@ -35,14 +37,19 @@ class PlacesScreen extends ConsumerWidget {
               childAspectRatio: 1.1,
               children: [
                 for (var i = 0; i < places.length; i++)
-                  FadeSlideIn(delay: i * 50, child: _PlaceTile(place: places[i])),
+                  FadeSlideIn(
+                    delay: i * 50,
+                    child: _PlaceTile(place: places[i]),
+                  ),
                 _AddTile(onTap: () => showPlaceSheet(context)),
               ],
             ),
             const SizedBox(height: 16),
             Center(
-              child: Text('Tap a place to edit · pins come from the map',
-                  style: AppText.body(size: 13, color: AppColors.muted)),
+              child: Text(
+                'Tap a place to edit · pins come from the map',
+                style: AppText.body(size: 13, color: AppColors.muted),
+              ),
             ),
           ],
         ),
@@ -56,31 +63,41 @@ class _PlaceTile extends StatelessWidget {
   final Place place;
   @override
   Widget build(BuildContext context) => Material(
-        color: AppColors.card,
-        borderRadius: BorderRadius.circular(16),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onLongPress: () => showPlaceSheet(context, existing: place),
-          onTap: () => showPlaceSheet(context, existing: place),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Container(
-                width: 56,
-                height: 56,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(color: AppColors.card2, borderRadius: BorderRadius.circular(16)),
-                child: Text(place.emoji, style: const TextStyle(fontSize: 30)),
-              ),
-              const Spacer(),
-              Text(place.name, style: AppText.body(size: 17, w: FontWeight.w700), overflow: TextOverflow.ellipsis),
-              const SizedBox(height: 3),
-              Text(place.address ?? '${place.lat.toStringAsFixed(4)}, ${place.lng.toStringAsFixed(4)}',
-                  style: AppText.body(size: 12, color: AppColors.muted), overflow: TextOverflow.ellipsis),
-            ]),
-          ),
+    color: AppColors.card,
+    borderRadius: BorderRadius.circular(16),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onLongPress: () => showPlaceSheet(context, existing: place),
+      onTap: () => showPlaceSheet(context, existing: place),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: AppColors.card2, borderRadius: BorderRadius.circular(16)),
+              child: Text(place.emoji, style: const TextStyle(fontSize: 30)),
+            ),
+            const Spacer(),
+            Text(
+              place.name,
+              style: AppText.body(size: 17, w: FontWeight.w700),
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 3),
+            Text(
+              place.address ?? '${place.lat.toStringAsFixed(4)}, ${place.lng.toStringAsFixed(4)}',
+              style: AppText.body(size: 12, color: AppColors.muted),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _AddTile extends StatelessWidget {
@@ -88,24 +105,30 @@ class _AddTile extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) => InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: CustomPaint(
-          painter: _DashedBorder(),
-          child: Center(
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(color: AppColors.amber.withValues(alpha: 0.12), shape: BoxShape.circle),
-                child: const Icon(Icons.add, color: AppColors.amber),
-              ),
-              const SizedBox(height: 8),
-              Text('Add place', style: AppText.body(color: AppColors.muted, w: FontWeight.w600)),
-            ]),
-          ),
+    borderRadius: BorderRadius.circular(16),
+    onTap: onTap,
+    child: CustomPaint(
+      painter: _DashedBorder(),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(color: AppColors.amber.withValues(alpha: 0.12), shape: BoxShape.circle),
+              child: const Icon(Icons.add, color: AppColors.amber),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Add place',
+              style: AppText.body(color: AppColors.muted, w: FontWeight.w600),
+            ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 }
 
 class _DashedBorder extends CustomPainter {

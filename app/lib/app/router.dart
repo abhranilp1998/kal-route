@@ -13,9 +13,18 @@ final router = GoRouter(
     ShellRoute(
       builder: (context, state, child) => _Shell(location: state.uri.path, child: child),
       routes: [
-        GoRoute(path: '/tomorrow', pageBuilder: (c, s) => const NoTransitionPage(child: TomorrowScreen())),
-        GoRoute(path: '/places', pageBuilder: (c, s) => const NoTransitionPage(child: PlacesScreen())),
-        GoRoute(path: '/settings', pageBuilder: (c, s) => const NoTransitionPage(child: SettingsScreen())),
+        GoRoute(
+          path: '/tomorrow',
+          pageBuilder: (c, s) => const NoTransitionPage(child: TomorrowScreen()),
+        ),
+        GoRoute(
+          path: '/places',
+          pageBuilder: (c, s) => const NoTransitionPage(child: PlacesScreen()),
+        ),
+        GoRoute(
+          path: '/settings',
+          pageBuilder: (c, s) => const NoTransitionPage(child: SettingsScreen()),
+        ),
       ],
     ),
     GoRoute(
@@ -38,13 +47,19 @@ class _Shell extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: DecoratedBox(
-        decoration: const BoxDecoration(border: Border(top: BorderSide(color: AppColors.line))),
+        decoration: const BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.line)),
+        ),
         child: NavigationBar(
           selectedIndex: idx,
           height: 68,
           onDestinationSelected: (i) => context.go(_tabs[i]),
           destinations: const [
-            NavigationDestination(icon: Icon(Icons.calendar_today_outlined), selectedIcon: Icon(Icons.calendar_today), label: 'Tomorrow'),
+            NavigationDestination(
+              icon: Icon(Icons.calendar_today_outlined),
+              selectedIcon: Icon(Icons.calendar_today),
+              label: 'Tomorrow',
+            ),
             NavigationDestination(icon: Icon(Icons.place_outlined), selectedIcon: Icon(Icons.place), label: 'Places'),
             NavigationDestination(icon: Icon(Icons.tune_outlined), selectedIcon: Icon(Icons.tune), label: 'Settings'),
           ],

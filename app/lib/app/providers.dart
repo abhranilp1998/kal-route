@@ -40,10 +40,12 @@ final placesProvider = Provider<List<Place>>((ref) => ref.watch(placesStreamProv
 
 /// Live list of tomorrow's trips, ordered by leave time.
 final tomorrowTripsStreamProvider = StreamProvider<List<Trip>>(
-    (ref) => ref.watch(planRepoProvider).watchTripsOn(tomorrowDate()).map((trips) => trips
-      ..sort((a, b) => (a.leaveAt ?? a.arriveBy).compareTo(b.leaveAt ?? b.arriveBy))));
-final tomorrowTripsProvider =
-    Provider<List<Trip>>((ref) => ref.watch(tomorrowTripsStreamProvider).value ?? const []);
+  (ref) => ref
+      .watch(planRepoProvider)
+      .watchTripsOn(tomorrowDate())
+      .map((trips) => trips..sort((a, b) => (a.leaveAt ?? a.arriveBy).compareTo(b.leaveAt ?? b.arriveBy))),
+);
+final tomorrowTripsProvider = Provider<List<Trip>>((ref) => ref.watch(tomorrowTripsStreamProvider).value ?? const []);
 
 final tripProvider = StreamProvider.family<Trip?, int>((ref, id) => ref.watch(planRepoProvider).watchById(id));
 

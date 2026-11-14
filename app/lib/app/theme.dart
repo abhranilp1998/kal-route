@@ -18,29 +18,30 @@ class AppColors {
   static const ferry = Color(0xFF36C5D6);
 
   static Color forMode(String mode) => switch (mode) {
-        'METRO' || 'TRAIN' => metro,
-        'BUS' => bus,
-        'AUTO' => auto,
-        'FERRY' => ferry,
-        'TRAM' => const Color(0xFFB57BFF),
-        'WALK' => walk,
-        _ => muted,
-      };
+    'METRO' || 'TRAIN' => metro,
+    'BUS' => bus,
+    'AUTO' => auto,
+    'FERRY' => ferry,
+    'TRAM' => const Color(0xFFB57BFF),
+    'WALK' => walk,
+    _ => muted,
+  };
 }
 
 const tabular = [FontFeature.tabularFigures()];
 
 class AppText {
-  static TextStyle heading(double size) => GoogleFonts.manrope(
-      fontSize: size, fontWeight: FontWeight.w800, color: AppColors.text, letterSpacing: -0.4);
+  static TextStyle heading(double size) =>
+      GoogleFonts.manrope(fontSize: size, fontWeight: FontWeight.w800, color: AppColors.text, letterSpacing: -0.4);
   static TextStyle leave([double size = 32]) => GoogleFonts.inter(
-      fontSize: size,
-      fontWeight: FontWeight.w700,
-      color: AppColors.amber,
-      letterSpacing: -0.6,
-      fontFeatures: tabular);
-  static TextStyle eyebrow([Color c = AppColors.muted]) => GoogleFonts.jetBrainsMono(
-      fontSize: 11, letterSpacing: 1.6, color: c, fontWeight: FontWeight.w500);
+    fontSize: size,
+    fontWeight: FontWeight.w700,
+    color: AppColors.amber,
+    letterSpacing: -0.6,
+    fontFeatures: tabular,
+  );
+  static TextStyle eyebrow([Color c = AppColors.muted]) =>
+      GoogleFonts.jetBrainsMono(fontSize: 11, letterSpacing: 1.6, color: c, fontWeight: FontWeight.w500);
   static TextStyle body({double size = 14, Color color = AppColors.text, FontWeight w = FontWeight.w500}) =>
       GoogleFonts.inter(fontSize: size, color: color, fontWeight: w, fontFeatures: tabular);
 }
@@ -69,10 +70,12 @@ ThemeData buildTheme() {
       backgroundColor: AppColors.bg,
       indicatorColor: AppColors.amber.withValues(alpha: 0.14),
       surfaceTintColor: Colors.transparent,
-      iconTheme: WidgetStateProperty.resolveWith((s) => IconThemeData(
-          color: s.contains(WidgetState.selected) ? AppColors.amber : AppColors.muted)),
-      labelTextStyle: WidgetStateProperty.resolveWith((s) => AppText.body(
-          size: 11, color: s.contains(WidgetState.selected) ? AppColors.amber : AppColors.muted)),
+      iconTheme: WidgetStateProperty.resolveWith(
+        (s) => IconThemeData(color: s.contains(WidgetState.selected) ? AppColors.amber : AppColors.muted),
+      ),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (s) => AppText.body(size: 11, color: s.contains(WidgetState.selected) ? AppColors.amber : AppColors.muted),
+      ),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: AppColors.card2,

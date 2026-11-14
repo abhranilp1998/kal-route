@@ -1,5 +1,10 @@
 # Commute Planner (v1.1)
 
+[![CI](https://github.com/abhranilp1998/kal-route/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/abhranilp1998/kal-route/actions/workflows/ci.yml)
+[![Release](https://github.com/abhranilp1998/kal-route/actions/workflows/release.yml/badge.svg)](https://github.com/abhranilp1998/kal-route/actions/workflows/release.yml)
+[![Latest release](https://img.shields.io/github/v/release/abhranilp1998/kal-route)](https://github.com/abhranilp1998/kal-route/releases/latest)
+[![Web demo](https://img.shields.io/badge/web-GitHub%20Pages-blue)](https://abhranilp1998.github.io/kal-route/)
+
 Personal commute planner for Kolkata. Save your places on a map, add tomorrow's
 trips, and every night the app fetches transit routes (metro, bus, auto, walk)
 and sends one card: "2 trips tomorrow · First: leave Home at 9:07 for College (arrive 9:55)".
@@ -134,6 +139,58 @@ Everything runs on web except background work: there is no scheduled nightly
 job and no system notification on web. Settings says so; "Run nightly job now"
 runs the same planning code, saves the routes to the database and shows the
 card text in-app.
+
+## CI/CD
+
+All workflows pin Flutter **3.47.7** (stable) and every action by commit SHA. Dependabot
+(`.github/dependabot.yml`) opens weekly PRs for pub, Gradle and GitHub Actions, monthly for the
+`tools/` npm package.
+
+**CI** (`.github/workflows/ci.yml`, on push/PR to `main`; older runs on the same ref are cancelled):
+
+| Job | What it does |
+|---|---|
+| Codegen, format, analyze, unit tests | `pub get --enforce-lockfile`; reruns `build_runner` and fails if generated Drift code differs from what's committed; `dart format` check on hand-written code (page width 120, see `analysis_options.yaml`); `flutter analyze`; `flutter test --coverage` (lcov uploaded as `coverage-lcov`) |
+| Web integration test + web build | Builds `integration_test/app_flow_test.dart` as a web app, runs it in headless Chrome with `tools/run_it_web.js` (exits non-zero unless the log says "All tests passed!"), then `flutter build web` (artifact `web-build`) |
+| Android debug APK | `flutter build apk --debug` (artifact `app-debug-apk`) |
+| Android emulator integration test | KVM-enabled API 34 x86_64 emulator via `reactivecircus/android-emulator-runner`, runs `flutter test integration_test/app_flow_test.dart` |
+
+The integration test talks to live OpenStreetMap/Nominatim, so a rare red run can be a network
+blip; re-run before digging in.
+
+**Release** (`.github/workflows/release.yml`, on tags `v*`, e.g. `git tag v1.2.0 && git push origin v1.2.0`):
+
+1. Derives `versionName` = `1.2.0` and `versionCode` = `major*10000 + minor*100 + patch` (`10200`) from the tag.
+2. Restores the upload keystore from secrets and builds a **signed** release APK and AAB
+   (`KAL_ROUTE_REQUIRE_RELEASE_SIGNING=true` makes the build fail rather than fall back to the debug key),
+   then checks the signer and version with `apksigner`/`aapt2`.
+3. Creates the GitHub Release with generated notes and attaches `kal-route-vX.Y.Z.apk`, `.aab` and `SHA256SUMS.txt`.
+4. Builds the web app with `--base-href /kal-route/` and deploys it to GitHub Pages:
+   <https://abhranilp1998.github.io/kal-route/>.
+
+Repository secrets used by the release workflow:
+
+| Secret | Purpose |
+|---|---|
+| `KAL_UPLOAD_KEYSTORE_BASE64` | base64 of the upload keystore (`.jks`, PKCS12) |
+| `KAL_UPLOAD_STORE_PASSWORD` | keystore password |
+| `KAL_UPLOAD_KEY_ALIAS` | key alias |
+| `KAL_UPLOAD_KEY_PASSWORD` | key password |
+| `MAPS_KEY` *(optional, not set)* | Google Directions key passed as `--dart-define=MAPS_KEY=...`; without it the app uses keyless routing |
+
+**Signing locally.** `android/app/build.gradle.kts` reads signing values from the environment
+(`KAL_ROUTE_KEYSTORE_PATH`, `KAL_ROUTE_KEYSTORE_PASSWORD`, `KAL_ROUTE_KEY_ALIAS`, `KAL_ROUTE_KEY_PASSWORD`)
+or from a git-ignored `app/android/key.properties`:
+
+```properties
+storeFile=/absolute/path/to/kal-route-upload.jks
+storePassword=...
+keyAlias=upload
+keyPassword=...
+```
+
+With neither present, release builds are signed with the debug key so `flutter run --release` still
+works. Gradle must run on JDK 21 (AGP 9 lint needs it); the app bytecode still targets Java 17.
 
 ## Known limitations
 

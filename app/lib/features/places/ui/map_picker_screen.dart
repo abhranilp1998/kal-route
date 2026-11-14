@@ -21,10 +21,12 @@ class PickedLocation {
 const kolkataCenter = LatLng(22.5646, 88.3510);
 
 Future<PickedLocation?> openMapPicker(BuildContext context, {double? lat, double? lng}) =>
-    Navigator.of(context, rootNavigator: true).push<PickedLocation>(MaterialPageRoute(
-      fullscreenDialog: true,
-      builder: (_) => MapPickerScreen(initial: lat != null && lng != null ? LatLng(lat, lng) : null),
-    ));
+    Navigator.of(context, rootNavigator: true).push<PickedLocation>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (_) => MapPickerScreen(initial: lat != null && lng != null ? LatLng(lat, lng) : null),
+      ),
+    );
 
 /// Full-screen place picker on OpenStreetMap:
 /// * pan the map or tap anywhere to drop the pin (pin stays in the centre),
@@ -136,189 +138,213 @@ class _MapPickerScreenState extends ConsumerState<MapPickerScreen> {
   Widget build(BuildContext context) {
     final top = MediaQuery.paddingOf(context).top;
     return Scaffold(
-      body: Stack(children: [
-        Positioned.fill(
-          child: FlutterMap(
-            key: const Key('map'),
-            mapController: _map,
-            options: MapOptions(
-              initialCenter: _center,
-              initialZoom: widget.initial != null ? 16.5 : 13,
-              minZoom: 4,
-              maxZoom: 19,
-              backgroundColor: AppColors.bg,
-              onPositionChanged: _onMoved,
-              onTap: (_, point) => _goTo(point, zoom: _map.camera.zoom),
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.abhranil.commute_planner',
-                maxNativeZoom: 19,
-                tileBuilder: darkModeTileBuilder,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: FlutterMap(
+              key: const Key('map'),
+              mapController: _map,
+              options: MapOptions(
+                initialCenter: _center,
+                initialZoom: widget.initial != null ? 16.5 : 13,
+                minZoom: 4,
+                maxZoom: 19,
+                backgroundColor: AppColors.bg,
+                onPositionChanged: _onMoved,
+                onTap: (_, point) => _goTo(point, zoom: _map.camera.zoom),
               ),
-              RichAttributionWidget(
-                alignment: AttributionAlignment.bottomLeft,
-                popupBackgroundColor: AppColors.card,
-                attributions: [
-                  TextSourceAttribution(
-                    'OpenStreetMap contributors',
-                    onTap: () => launchUrl(Uri.parse('https://www.openstreetmap.org/copyright')),
-                  ),
-                  const TextSourceAttribution('Search: Nominatim', prependCopyright: false),
-                ],
-              ),
-            ],
-          ),
-        ),
-        // Centre pin (the map moves underneath it).
-        const IgnorePointer(
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 44),
-              child: Icon(Icons.location_on, size: 48, color: AppColors.amber, shadows: [
-                Shadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2)),
-              ]),
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'com.abhranil.commute_planner',
+                  maxNativeZoom: 19,
+                  tileBuilder: darkModeTileBuilder,
+                ),
+                RichAttributionWidget(
+                  alignment: AttributionAlignment.bottomLeft,
+                  popupBackgroundColor: AppColors.card,
+                  attributions: [
+                    TextSourceAttribution(
+                      'OpenStreetMap contributors',
+                      onTap: () => launchUrl(Uri.parse('https://www.openstreetmap.org/copyright')),
+                    ),
+                    const TextSourceAttribution('Search: Nominatim', prependCopyright: false),
+                  ],
+                ),
+              ],
             ),
           ),
-        ),
-        // Search bar + results.
-        Positioned(
-          left: 16,
-          right: 16,
-          top: top + 12,
-          child: Column(children: [
-            Row(children: [
-              Material(
-                color: AppColors.card,
-                borderRadius: BorderRadius.circular(14),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () => Navigator.of(context).pop(),
-                  child: const SizedBox(width: 48, height: 48, child: Icon(Icons.close, color: AppColors.text)),
+          // Centre pin (the map moves underneath it).
+          const IgnorePointer(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 44),
+                child: Icon(
+                  Icons.location_on,
+                  size: 48,
+                  color: AppColors.amber,
+                  shadows: [Shadow(color: Colors.black54, blurRadius: 8, offset: Offset(0, 2))],
                 ),
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  key: const Key('map-search'),
-                  controller: _search,
-                  textInputAction: TextInputAction.search,
-                  onSubmitted: (_) => _runSearch(),
-                  style: AppText.body(size: 15),
-                  decoration: InputDecoration(
-                    hintText: 'Search address or landmark',
-                    hintStyle: AppText.body(size: 15, color: AppColors.muted),
-                    fillColor: AppColors.card,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                    prefixIcon: const Icon(Icons.search, color: AppColors.muted),
-                    suffixIcon: _searching
-                        ? const Padding(
-                            padding: EdgeInsets.all(14),
-                            child: SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)))
-                        : IconButton(
-                            key: const Key('map-search-go'),
-                            icon: const Icon(Icons.arrow_forward, color: AppColors.amber),
-                            onPressed: _runSearch,
+            ),
+          ),
+          // Search bar + results.
+          Positioned(
+            left: 16,
+            right: 16,
+            top: top + 12,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Material(
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(14),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(14),
+                        onTap: () => Navigator.of(context).pop(),
+                        child: const SizedBox(width: 48, height: 48, child: Icon(Icons.close, color: AppColors.text)),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        key: const Key('map-search'),
+                        controller: _search,
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: (_) => _runSearch(),
+                        style: AppText.body(size: 15),
+                        decoration: InputDecoration(
+                          hintText: 'Search address or landmark',
+                          hintStyle: AppText.body(size: 15, color: AppColors.muted),
+                          fillColor: AppColors.card,
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                          prefixIcon: const Icon(Icons.search, color: AppColors.muted),
+                          suffixIcon: _searching
+                              ? const Padding(
+                                  padding: EdgeInsets.all(14),
+                                  child: SizedBox(
+                                    width: 18,
+                                    height: 18,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                )
+                              : IconButton(
+                                  key: const Key('map-search-go'),
+                                  icon: const Icon(Icons.arrow_forward, color: AppColors.amber),
+                                  onPressed: _runSearch,
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (_results != null) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    constraints: const BoxConstraints(maxHeight: 300),
+                    decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(14)),
+                    child: _results!.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Text('No results', style: AppText.body(color: AppColors.muted)),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: _results!.length,
+                            separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.line),
+                            itemBuilder: (_, i) {
+                              final r = _results![i];
+                              return ListTile(
+                                key: Key('search-result-$i'),
+                                leading: const Icon(Icons.place_outlined, color: AppColors.amber),
+                                title: Text(r.shortName, style: AppText.body(size: 14, w: FontWeight.w600)),
+                                subtitle: Text(
+                                  r.displayName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppText.body(size: 12, color: AppColors.muted),
+                                ),
+                                onTap: () {
+                                  setState(() => _results = null);
+                                  _goTo(LatLng(r.lat, r.lng));
+                                },
+                              );
+                            },
                           ),
                   ),
-                ),
-              ),
-            ]),
-            if (_results != null) ...[
-              const SizedBox(height: 8),
-              Container(
-                constraints: const BoxConstraints(maxHeight: 300),
-                decoration: BoxDecoration(color: AppColors.card, borderRadius: BorderRadius.circular(14)),
-                child: _results!.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text('No results', style: AppText.body(color: AppColors.muted)))
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        itemCount: _results!.length,
-                        separatorBuilder: (_, _) => const Divider(height: 1, color: AppColors.line),
-                        itemBuilder: (_, i) {
-                          final r = _results![i];
-                          return ListTile(
-                            key: Key('search-result-$i'),
-                            leading: const Icon(Icons.place_outlined, color: AppColors.amber),
-                            title: Text(r.shortName, style: AppText.body(size: 14, w: FontWeight.w600)),
-                            subtitle: Text(r.displayName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppText.body(size: 12, color: AppColors.muted)),
-                            onTap: () {
-                              setState(() => _results = null);
-                              _goTo(LatLng(r.lat, r.lng));
-                            },
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ]),
-        ),
-        // My location.
-        Positioned(
-          right: 16,
-          bottom: 206,
-          child: FloatingActionButton.small(
-            key: const Key('my-location'),
-            heroTag: 'my-location',
-            backgroundColor: AppColors.card,
-            foregroundColor: AppColors.text,
-            onPressed: _locating ? null : _myLocation,
-            child: _locating
-                ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Icon(Icons.my_location),
+                ],
+              ],
+            ),
           ),
-        ),
-        // Selected location card.
-        Positioned(
-          left: 16,
-          right: 16,
-          bottom: 16 + MediaQuery.paddingOf(context).bottom,
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
+          // My location.
+          Positioned(
+            right: 16,
+            bottom: 206,
+            child: FloatingActionButton.small(
+              key: const Key('my-location'),
+              heroTag: 'my-location',
+              backgroundColor: AppColors.card,
+              foregroundColor: AppColors.text,
+              onPressed: _locating ? null : _myLocation,
+              child: _locating
+                  ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.my_location),
+            ),
+          ),
+          // Selected location card.
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 16 + MediaQuery.paddingOf(context).bottom,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
                 color: const Color(0xFF181B1E),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.line)),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
-              Text('PIN LOCATION', style: AppText.eyebrow()),
-              const SizedBox(height: 6),
-              Text(
-                key: const Key('picked-address'),
-                _resolving && _address == null
-                    ? 'Looking up address…'
-                    : _address?.shortName ?? _addressError ?? 'Move the map to place the pin',
-                style: AppText.body(size: 16, w: FontWeight.w600),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                border: Border.all(color: AppColors.line),
               ),
-              const SizedBox(height: 2),
-              Text(
-                '${_center.latitude.toStringAsFixed(5)}, ${_center.longitude.toStringAsFixed(5)}'
-                '${_resolving ? ' · updating…' : ''}',
-                style: AppText.body(size: 12, color: AppColors.muted),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('PIN LOCATION', style: AppText.eyebrow()),
+                  const SizedBox(height: 6),
+                  Text(
+                    key: const Key('picked-address'),
+                    _resolving && _address == null
+                        ? 'Looking up address…'
+                        : _address?.shortName ?? _addressError ?? 'Move the map to place the pin',
+                    style: AppText.body(size: 16, w: FontWeight.w600),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${_center.latitude.toStringAsFixed(5)}, ${_center.longitude.toStringAsFixed(5)}'
+                    '${_resolving ? ' · updating…' : ''}',
+                    style: AppText.body(size: 12, color: AppColors.muted),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    key: const Key('use-location'),
+                    onPressed: () => Navigator.of(context).pop(
+                      PickedLocation(
+                        _center.latitude,
+                        _center.longitude,
+                        address: _resolving ? null : _address?.shortName,
+                        fullAddress: _resolving ? null : _address?.displayName,
+                      ),
+                    ),
+                    child: const Text('Use this location'),
+                  ),
+                ],
               ),
-              const SizedBox(height: 12),
-              FilledButton(
-                key: const Key('use-location'),
-                onPressed: () => Navigator.of(context).pop(PickedLocation(
-                  _center.latitude,
-                  _center.longitude,
-                  address: _resolving ? null : _address?.shortName,
-                  fullAddress: _resolving ? null : _address?.displayName,
-                )),
-                child: const Text('Use this location'),
-              ),
-            ]),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }

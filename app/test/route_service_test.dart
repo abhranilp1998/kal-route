@@ -7,9 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 RouteResult r(int minutes, int fare, List<String> modes, {int walk = 5}) {
   final start = DateTime(2026, 11, 16, 9);
-  final legs = [
-    for (final m in modes) RouteLeg(m, null, 'a', 'b', m == 'WALK' ? walk : 10, m == 'WALK' ? 0 : null),
-  ];
+  final legs = [for (final m in modes) RouteLeg(m, null, 'a', 'b', m == 'WALK' ? walk : 10, m == 'WALK' ? 0 : null)];
   return RouteResult(legs, start, start.add(Duration(minutes: minutes)), totalFareInr: fare);
 }
 
@@ -52,7 +50,14 @@ void main() {
     const mock = MockDirectionsClient(latency: Duration.zero);
     final arrive = DateTime(2026, 11, 16, 10);
     final routes = await mock.transitRoutes(
-        fromLat: 0, fromLng: 0, toLat: 0, toLng: 0, arriveBy: arrive, fromName: 'Home', toName: 'College');
+      fromLat: 0,
+      fromLng: 0,
+      toLat: 0,
+      toLng: 0,
+      arriveBy: arrive,
+      fromName: 'Home',
+      toName: 'College',
+    );
     expect(routes, isNotEmpty);
     expect(routes.first.legs.any((l) => l.line == 'Blue Line'), isTrue);
     expect(routes.first.fare, 35);
@@ -61,7 +66,14 @@ void main() {
     }
     // Reverse direction works too.
     final back = await mock.transitRoutes(
-        fromLat: 0, fromLng: 0, toLat: 0, toLng: 0, arriveBy: arrive, fromName: 'College', toName: 'Home');
+      fromLat: 0,
+      fromLng: 0,
+      toLat: 0,
+      toLng: 0,
+      arriveBy: arrive,
+      fromName: 'College',
+      toName: 'Home',
+    );
     expect(back.first.legs.first.from, 'College');
   });
 }

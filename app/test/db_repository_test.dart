@@ -31,9 +31,9 @@ void main() {
   tearDown(() => db.close());
 
   Future<(Place, Place)> twoPlaces() async => (
-        await places.save(Place(name: 'Home', lat: 22.52, lng: 88.34, emoji: '🏠')),
-        await places.save(Place(name: 'College', lat: 22.58, lng: 88.41)),
-      );
+    await places.save(Place(name: 'Home', lat: 22.52, lng: 88.34, emoji: '🏠')),
+    await places.save(Place(name: 'College', lat: 22.58, lng: 88.41)),
+  );
 
   group('PlaceRepository', () {
     test('insert assigns ids, update keeps id, delete removes', () async {
@@ -80,18 +80,20 @@ void main() {
     test('round-trips every column, including enum status and route json', () async {
       final (home, college) = await twoPlaces();
       final day = DateTime(2026, 11, 16);
-      final t = await plans.save(Trip(
-        date: day,
-        fromPlaceId: home.id,
-        toPlaceId: college.id,
-        arriveBy: atTime(day, 10, 0),
-        status: TripStatus.notified,
-        leaveAt: atTime(day, 9, 7),
-        bufferMinutes: 5,
-        cachedRouteJson: '{"x":1}',
-        routeFetchedAt: DateTime(2026, 11, 15, 21),
-        routeSource: 'example',
-      ));
+      final t = await plans.save(
+        Trip(
+          date: day,
+          fromPlaceId: home.id,
+          toPlaceId: college.id,
+          arriveBy: atTime(day, 10, 0),
+          status: TripStatus.notified,
+          leaveAt: atTime(day, 9, 7),
+          bufferMinutes: 5,
+          cachedRouteJson: '{"x":1}',
+          routeFetchedAt: DateTime(2026, 11, 15, 21),
+          routeSource: 'example',
+        ),
+      );
       final back = (await plans.byId(t.id))!;
       expect(back.status, TripStatus.notified);
       expect(back.leaveAt, atTime(day, 9, 7));
@@ -111,17 +113,23 @@ void main() {
 
     test('trip with unknown place is rejected by the foreign key', () async {
       final day = DateTime(2026, 11, 16);
-      expect(() => plans.save(Trip(date: day, fromPlaceId: 98, toPlaceId: 99, arriveBy: day)),
-          throwsA(isA<SqliteException>()));
+      expect(
+        () => plans.save(Trip(date: day, fromPlaceId: 98, toPlaceId: 99, arriveBy: day)),
+        throwsA(isA<SqliteException>()),
+      );
     });
   });
 
   test('schema has the trip date and status indexes', () async {
-    final rows = await db.customSelect("SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = 'trips'").get();
+    final rows = await db
+        .customSelect("SELECT name FROM sqlite_master WHERE type = 'index' AND tbl_name = 'trips'")
+        .get();
     expect(rows.map((r) => r.read<String>('name')), containsAll(['trips_date_idx', 'trips_status_idx']));
     final plan = await db
-        .customSelect('EXPLAIN QUERY PLAN SELECT * FROM trips WHERE date >= ? AND date < ?',
-            variables: [Variable.withInt(0), Variable.withInt(1)])
+        .customSelect(
+          'EXPLAIN QUERY PLAN SELECT * FROM trips WHERE date >= ? AND date < ?',
+          variables: [Variable.withInt(0), Variable.withInt(1)],
+        )
         .get();
     expect(plan.map((r) => r.data['detail'].toString()).join(' '), contains('trips_date_idx'));
   });
@@ -135,10 +143,26 @@ void main() {
           {'id': 9, 'name': 'College', 'lat': 22.6, 'lng': 88.4, 'address': null, 'emoji': '🎓'},
         ]),
         'trips_v1': jsonEncode([
-          {'id': 1, 'date': day.toIso8601String(), 'fromPlaceId': 7, 'toPlaceId': 9,
-            'arriveBy': atTime(day, 10, 0).toIso8601String(), 'status': 'planned', 'leaveAt': null, 'cachedRouteJson': null},
-          {'id': 2, 'date': day.toIso8601String(), 'fromPlaceId': 7, 'toPlaceId': 55,
-            'arriveBy': atTime(day, 11, 0).toIso8601String(), 'status': 'planned', 'leaveAt': null, 'cachedRouteJson': null},
+          {
+            'id': 1,
+            'date': day.toIso8601String(),
+            'fromPlaceId': 7,
+            'toPlaceId': 9,
+            'arriveBy': atTime(day, 10, 0).toIso8601String(),
+            'status': 'planned',
+            'leaveAt': null,
+            'cachedRouteJson': null,
+          },
+          {
+            'id': 2,
+            'date': day.toIso8601String(),
+            'fromPlaceId': 7,
+            'toPlaceId': 55,
+            'arriveBy': atTime(day, 11, 0).toIso8601String(),
+            'status': 'planned',
+            'leaveAt': null,
+            'cachedRouteJson': null,
+          },
         ]),
         'seeded_v1': true,
       });

@@ -13,11 +13,11 @@ import 'app_database.dart';
 /// EXAMPLE DATA offered on first launch so the app is usable straight away.
 /// Coordinates are real Kolkata locations; the people/addresses are examples.
 List<Place> examplePlaces() => [
-      Place(name: 'Home', emoji: '🏠', lat: 22.5203, lng: 88.3468, address: 'Lake Road, Kalighat'),
-      Place(name: 'College', emoji: '🎓', lat: 22.5867, lng: 88.4171, address: 'Sector II, Salt Lake'),
-      Place(name: 'Gym', emoji: '🏋️', lat: 22.5880, lng: 88.4085, address: 'City Centre, Salt Lake'),
-      Place(name: "Mom's place", emoji: '👵', lat: 22.4980, lng: 88.3105, address: 'Diamond Harbour Rd, Behala'),
-    ];
+  Place(name: 'Home', emoji: '🏠', lat: 22.5203, lng: 88.3468, address: 'Lake Road, Kalighat'),
+  Place(name: 'College', emoji: '🎓', lat: 22.5867, lng: 88.4171, address: 'Sector II, Salt Lake'),
+  Place(name: 'Gym', emoji: '🏋️', lat: 22.5880, lng: 88.4085, address: 'City Centre, Salt Lake'),
+  Place(name: "Mom's place", emoji: '👵', lat: 22.4980, lng: 88.3105, address: 'Diamond Harbour Rd, Behala'),
+];
 
 const _seededKey = 'example_seeded_v2';
 
@@ -45,9 +45,16 @@ Future<void> seedExampleData(AppDatabase db, DirectionsSource client, Prefs pref
   ];
   for (final t in trips) {
     try {
-      await planTrip(t, from: saved.firstWhere((p) => p.id == t.fromPlaceId),
-          to: saved.firstWhere((p) => p.id == t.toPlaceId), client: client, prefs: prefs);
-    } catch (_) {/* fetched later by the nightly job or the refresh button */}
+      await planTrip(
+        t,
+        from: saved.firstWhere((p) => p.id == t.fromPlaceId),
+        to: saved.firstWhere((p) => p.id == t.toPlaceId),
+        client: client,
+        prefs: prefs,
+      );
+    } catch (_) {
+      /* fetched later by the nightly job or the refresh button */
+    }
     await plan.save(t);
   }
 }

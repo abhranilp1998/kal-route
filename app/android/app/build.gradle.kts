@@ -1,7 +1,37 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Release signing. Values come from (first match wins):
+//   1. environment: KAL_ROUTE_KEYSTORE_PATH, KAL_ROUTE_KEYSTORE_PASSWORD,
+//      KAL_ROUTE_KEY_ALIAS, KAL_ROUTE_KEY_PASSWORD   (used by CI)
+//   2. android/key.properties: storeFile, storePassword, keyAlias, keyPassword
+//      (local; git-ignored, storeFile relative to android/)
+// Without either, local release builds fall back to the debug key so
+// `flutter run --release` keeps working. CI release builds set
+// KAL_ROUTE_REQUIRE_RELEASE_SIGNING=true so a missing key fails the build
+// instead of publishing a debug-signed app.
+val keyProps = Properties().apply {
+    val f = rootProject.file("key.properties")
+    if (f.exists()) FileInputStream(f).use { load(it) }
+}
+fun signingValue(env: String, prop: String): String? =
+    System.getenv(env)?.takeIf { it.isNotBlank() } ?: keyProps.getProperty(prop)?.takeIf { it.isNotBlank() }
+
+val releaseStoreFile = signingValue("KAL_ROUTE_KEYSTORE_PATH", "storeFile")?.let { rootProject.file(it) }
+val releaseStorePassword = signingValue("KAL_ROUTE_KEYSTORE_PASSWORD", "storePassword")
+val releaseKeyAlias = signingValue("KAL_ROUTE_KEY_ALIAS", "keyAlias")
+val releaseKeyPassword = signingValue("KAL_ROUTE_KEY_PASSWORD", "keyPassword")
+val hasReleaseSigning = releaseStoreFile?.exists() == true &&
+    releaseStorePassword != null && releaseKeyAlias != null && releaseKeyPassword != null
+val requireReleaseSigning = System.getenv("KAL_ROUTE_REQUIRE_RELEASE_SIGNING") == "true"
+if (requireReleaseSigning && !hasReleaseSigning) {
+    throw GradleException("KAL_ROUTE_REQUIRE_RELEASE_SIGNING=true but the release keystore/passwords are missing")
 }
 
 android {
@@ -17,7 +47,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.abhranil.commute_planner"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -31,11 +60,25 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = releaseStoreFile
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                logger.warn("kal-route: no release keystore configured, signing release build with the debug key")
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }

@@ -5,17 +5,36 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final d = DateTime(2026, 11, 16);
   DateTime at(int h, int m) => DateTime(d.year, d.month, d.day, h, m);
-  final route = RouteResult([
-    const RouteLeg('WALK', null, 'Home', 'Kalighat Metro', 6, 0),
-    RouteLeg('METRO', 'Blue Line', 'Kalighat Metro', 'Esplanade', 14, 15,
-        stops: 6, headsign: 'Dakshineswar', departAt: DateTime(2026, 11, 16, 9, 18)),
-    const RouteLeg('BUS', 'S-12', 'Esplanade', 'Karunamoyee', 18, 20, headsign: 'Salt Lake'),
-    const RouteLeg('WALK', null, 'Karunamoyee', 'College', 5, 0),
-  ], at(9, 12), at(9, 55));
+  final route = RouteResult(
+    [
+      const RouteLeg('WALK', null, 'Home', 'Kalighat Metro', 6, 0),
+      RouteLeg(
+        'METRO',
+        'Blue Line',
+        'Kalighat Metro',
+        'Esplanade',
+        14,
+        15,
+        stops: 6,
+        headsign: 'Dakshineswar',
+        departAt: DateTime(2026, 11, 16, 9, 18),
+      ),
+      const RouteLeg('BUS', 'S-12', 'Esplanade', 'Karunamoyee', 18, 20, headsign: 'Salt Lake'),
+      const RouteLeg('WALK', null, 'Karunamoyee', 'College', 5, 0),
+    ],
+    at(9, 12),
+    at(9, 55),
+  );
 
   test('starts at the leave time and shows the buffer as its own segment', () {
     final t = buildTimeline(
-        route: route, leaveAt: at(9, 7), bufferMinutes: 5, startName: 'Home', endName: 'College', arriveBy: at(10, 0));
+      route: route,
+      leaveAt: at(9, 7),
+      bufferMinutes: 5,
+      startName: 'Home',
+      endName: 'College',
+      arriveBy: at(10, 0),
+    );
     expect(t.nodes.first.kind, NodeKind.leave);
     expect(t.nodes.first.time, at(9, 7)); // == card + notification leave time
     expect(t.nodes.first.title, 'Leave Home');
@@ -39,10 +58,14 @@ void main() {
   });
 
   test('waits for a transit departure later than the walk arrival', () {
-    final r = RouteResult([
-      const RouteLeg('WALK', null, 'Home', 'Stop', 4, 0),
-      RouteLeg('BUS', '215A', 'Stop', 'Karunamoyee', 30, 20, departAt: at(9, 10)),
-    ], at(9, 0), at(9, 40));
+    final r = RouteResult(
+      [
+        const RouteLeg('WALK', null, 'Home', 'Stop', 4, 0),
+        RouteLeg('BUS', '215A', 'Stop', 'Karunamoyee', 30, 20, departAt: at(9, 10)),
+      ],
+      at(9, 0),
+      at(9, 40),
+    );
     final t = buildTimeline(route: r, leaveAt: null, bufferMinutes: 0, startName: 'Home', endName: 'College');
     expect(t.nodes[1].time, at(9, 4)); // reach stop
     expect(t.nodes.last.time, at(9, 40));

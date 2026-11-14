@@ -2,8 +2,17 @@ import 'dart:convert';
 
 /// One leg of a route: WALK, METRO, BUS, AUTO, FERRY, TRAM, TRAIN, OTHER.
 class RouteLeg {
-  const RouteLeg(this.mode, this.line, this.from, this.to, this.minutes, this.fareInr,
-      {this.stops, this.headsign, this.departAt});
+  const RouteLeg(
+    this.mode,
+    this.line,
+    this.from,
+    this.to,
+    this.minutes,
+    this.fareInr, {
+    this.stops,
+    this.headsign,
+    this.departAt,
+  });
 
   final String mode;
   final String? line; // "Blue Line", "S-12"
@@ -18,28 +27,28 @@ class RouteLeg {
   bool get isWalk => mode == 'WALK';
 
   Map<String, dynamic> toJson() => {
-        'mode': mode,
-        'line': line,
-        'from': from,
-        'to': to,
-        'minutes': minutes,
-        'fareInr': fareInr,
-        'stops': stops,
-        'headsign': headsign,
-        'departAt': departAt?.toIso8601String(),
-      };
+    'mode': mode,
+    'line': line,
+    'from': from,
+    'to': to,
+    'minutes': minutes,
+    'fareInr': fareInr,
+    'stops': stops,
+    'headsign': headsign,
+    'departAt': departAt?.toIso8601String(),
+  };
 
   factory RouteLeg.fromJson(Map<String, dynamic> j) => RouteLeg(
-        j['mode'] as String,
-        j['line'] as String?,
-        j['from'] as String,
-        j['to'] as String,
-        j['minutes'] as int,
-        j['fareInr'] as int?,
-        stops: j['stops'] as int?,
-        headsign: j['headsign'] as String?,
-        departAt: j['departAt'] == null ? null : DateTime.parse(j['departAt'] as String),
-      );
+    j['mode'] as String,
+    j['line'] as String?,
+    j['from'] as String,
+    j['to'] as String,
+    j['minutes'] as int,
+    j['fareInr'] as int?,
+    stops: j['stops'] as int?,
+    headsign: j['headsign'] as String?,
+    departAt: j['departAt'] == null ? null : DateTime.parse(j['departAt'] as String),
+  );
 }
 
 class RouteResult {
@@ -61,11 +70,11 @@ class RouteResult {
   bool get walkOnly => legs.isNotEmpty && legs.every((l) => l.isWalk);
 
   String toJson() => jsonEncode({
-        'legs': legs.map((l) => l.toJson()).toList(),
-        'leaveAt': leaveAt.toIso8601String(),
-        'arriveAt': arriveAt.toIso8601String(),
-        'totalFareInr': totalFareInr,
-      });
+    'legs': legs.map((l) => l.toJson()).toList(),
+    'leaveAt': leaveAt.toIso8601String(),
+    'arriveAt': arriveAt.toIso8601String(),
+    'totalFareInr': totalFareInr,
+  });
 
   factory RouteResult.fromJson(String s) {
     final j = jsonDecode(s) as Map<String, dynamic>;

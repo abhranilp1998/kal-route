@@ -1,0 +1,167 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: "3.47.7"
+  JAVA_VERSION: "21" # AGP 9.x lint needs a JDK 21 runtime; bytecode still targets 17
+
+defaults:
+  run:
+    working-directory: app
+
+jobs:
+  checks:
+    name: Codegen, format, analyze, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter --version
+      - run: flutter pub get --enforce-lockfile
+      - name: Drift codegen is up to date
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+          git diff --exit-code -- . || { echo "::error::Generated code is stale. Run 'dart run build_runner build --delete-conflicting-outputs' and commit."; exit 1; }
+          test -z "$(git status --porcelain -- .)" || { git status --porcelain -- .; echo "::error::build_runner produced untracked files"; exit 1; }
+      - name: dart format (hand-written code)
+        run: git ls-files -z '*.dart' | grep -zv -e '\.g\.dart$' -e '/generated/' | xargs -0 dart format --output=none --set-exit-if-changed
+      - run: flutter analyze
+      - name: flutter test (with coverage)
+        run: flutter test --coverage
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: coverage-lcov
+          path: app/coverage/lcov.info
+          if-no-files-found: error
+          retention-days: 14
+
+  web:
+    name: Web integration test + web build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tools/package-lock.json
+      - run: flutter pub get --enforce-lockfile
+      - name: Install Playwright runner
+        working-directory: tools
+        run: npm ci
+      - name: Build integration test as a web app
+        run: flutter build web -t integration_test/app_flow_test.dart --profile -o "$RUNNER_TEMP/itweb"
+      - name: Run integration test in headless Chrome
+        env:
+          IT_SCREENSHOT_DIR: ${{ runner.temp }}
+        run: |
+          python3 -m http.server 8111 --directory "$RUNNER_TEMP/itweb" >/dev/null 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://localhost:8111/ >/dev/null && break; sleep 1; done
+          node ../tools/run_it_web.js 8111 600
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: failure()
+        with:
+          name: web-it-screenshot
+          path: ${{ runner.temp }}/it_final.png
+          if-no-files-found: ignore
+      - name: flutter build web (release)
+        run: flutter build web --release
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-build
+          path: app/build/web
+          if-no-files-found: error
+          retention-days: 7
+
+  android-debug-apk:
+    name: Android debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter build apk --debug
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: app-debug-apk
+          path: app/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
+
+  android-integration:
+    name: Android emulator integration test
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Enable KVM
+        working-directory: .
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+      - run: flutter pub get --enforce-lockfile
+      # Build the debug APK before booting the emulator so Gradle and the
+      # emulator don't compete for the runner's CPU/RAM.
+      - name: Pre-build debug APK
+        run: flutter build apk --debug
+      - name: Run integration_test on emulator
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          ram-size: 4096M
+          disk-size: 6000M
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot -camera-back none
+          disable-animations: true
+          working-directory: app
+          script: flutter test integration_test/app_flow_test.dart -d emulator-5554 --reporter expanded

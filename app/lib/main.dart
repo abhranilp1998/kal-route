@@ -39,10 +39,7 @@ Future<Widget> bootstrap({AppDatabase? db, bool seed = true, bool background = t
   }
 
   return ProviderScope(
-    overrides: [
-      databaseProvider.overrideWithValue(database),
-      initialPrefsProvider.overrideWithValue(prefs),
-    ],
+    overrides: [databaseProvider.overrideWithValue(database), initialPrefsProvider.overrideWithValue(prefs)],
     child: App(db: database),
   );
 }
@@ -62,9 +59,7 @@ class _AppState extends State<App> {
     super.initState();
     // The nightly job runs in a separate Flutter engine and writes the same
     // SQLite file; on resume, re-run watch queries so the UI shows its writes.
-    _lifecycle = AppLifecycleListener(
-      onResume: () => widget.db.markTablesUpdated([widget.db.trips, widget.db.places]),
-    );
+    _lifecycle = AppLifecycleListener(onResume: () => widget.db.markTablesUpdated([widget.db.trips, widget.db.places]));
   }
 
   @override
@@ -75,11 +70,11 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        title: 'Commute Planner',
-        debugShowCheckedModeBanner: false,
-        theme: buildTheme(),
-        darkTheme: buildTheme(),
-        themeMode: ThemeMode.dark,
-        routerConfig: router,
-      );
+    title: 'Commute Planner',
+    debugShowCheckedModeBanner: false,
+    theme: buildTheme(),
+    darkTheme: buildTheme(),
+    themeMode: ThemeMode.dark,
+    routerConfig: router,
+  );
 }

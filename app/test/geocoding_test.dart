@@ -44,14 +44,13 @@ void main() {
       requests.add(req);
       times.add(DateTime.now());
       return http.Response.bytes(
-          utf8.encode(req.url.path == '/search' ? searchBody : reverseBody), 200,
-          headers: {'content-type': 'application/json; charset=utf-8'});
+        utf8.encode(req.url.path == '/search' ? searchBody : reverseBody),
+        200,
+        headers: {'content-type': 'application/json; charset=utf-8'},
+      );
     });
     final g = NominatimGeocoder(client: client, minInterval: const Duration(milliseconds: 300));
-    final results = await Future.wait([
-      g.search('Kalighat'),
-      g.reverse(22.58671, 88.41712),
-    ]);
+    final results = await Future.wait([g.search('Kalighat'), g.reverse(22.58671, 88.41712)]);
     expect((results[0] as List<GeoResult>).length, 2);
     expect(requests, hasLength(2));
     expect(times[1].difference(times[0]).inMilliseconds, greaterThanOrEqualTo(290));
